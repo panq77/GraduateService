@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pq.empm.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="pq.empm.model.User">
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="uname" jdbcType="VARCHAR" property="uname" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="phone" jdbcType="INTEGER" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="expected_job" jdbcType="VARCHAR" property="expectedJob" />
+    <result column="expected_eara" jdbcType="VARCHAR" property="expectedEara" />
+    <result column="education" jdbcType="VARCHAR" property="education" />
+    <result column="has_experience" jdbcType="INTEGER" property="hasExperience" />
+  </resultMap>
+  <update id="update" parameterType="pq.empm.model.User">
+      update e_user
+      <trim prefix="set" suffix="where uid = #{uid}" prefixOverrides="," >
+        <if test="uname != null">
+          uname=#{uname},
+        </if>
+        <if test="pwd != null">
+          pwd=#{pwd},
+        </if>
+        <if test="age != null">
+          age=#{age},
+        </if>
+        <if test="gender != null">
+          gender=#{gender},
+        </if>
+        <if test="phone != null">
+          phone=#{phone},
+        </if>
+        <if test="email != null">
+          email=#{email},
+        </if>
+        <if test="expectedJob != null">
+          expected_job=#{expectedJob},
+        </if>
+        <if test="expectedEara != null">
+          expected_eara=#{expectedEara},
+        </if>
+        <if test="education != null">
+          education=#{education},
+        </if>
+        <if test="hasExperience != null">
+          has_experience=#{hasExperience},
+        </if>
+        uid=#{uid}
+
+
+      </trim>
+
+
+
+
+
+  </update>
+  <select id="queryByName" resultMap="BaseResultMap">
+    select uid, uname, pwd,
+           age, gender, phone,
+           email, expected_job, expected_eara,
+           education, has_experience from e_user where uname=#{uname}
+
+  </select>
+
+  <insert id="insert" parameterType="pq.empm.model.User"  useGeneratedKeys="true" keyProperty="id">
+    insert into e_user (uid, uname, pwd, 
+      age, gender, phone, 
+      email, expected_job, expected_eara, 
+      education, has_experience)
+    values (#{uid,jdbcType=INTEGER}, #{uname,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{gender,jdbcType=INTEGER}, #{phone,jdbcType=INTEGER}, 
+      #{email,jdbcType=VARCHAR}, #{expectedJob,jdbcType=VARCHAR}, #{expectedEara,jdbcType=VARCHAR}, 
+      #{education,jdbcType=VARCHAR}, #{hasExperience,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="pq.empm.model.User">
+    insert into e_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="uname != null">
+        uname,
+      </if>
+      <if test="pwd != null">
+        pwd,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="expectedJob != null">
+        expected_job,
+      </if>
+      <if test="expectedEara != null">
+        expected_eara,
+      </if>
+      <if test="education != null">
+        education,
+      </if>
+      <if test="hasExperience != null">
+        has_experience,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="uname != null">
+        #{uname,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=INTEGER},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="expectedJob != null">
+        #{expectedJob,jdbcType=VARCHAR},
+      </if>
+      <if test="expectedEara != null">
+        #{expectedEara,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="hasExperience != null">
+        #{hasExperience,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
