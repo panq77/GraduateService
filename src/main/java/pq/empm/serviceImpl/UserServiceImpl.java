@@ -3,17 +3,18 @@ package pq.empm.serviceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pq.empm.dao.UserMapper;
-import pq.empm.ex.Inserterror;
-import pq.empm.ex.PwdNotMatch;
-import pq.empm.ex.UserExist;
-import pq.empm.ex.UserNoFound;
+import pq.empm.ex.*;
 import pq.empm.model.User;
 import pq.empm.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
     private UserMapper userMapper;
+
+    @Autowired(required = false)
+     void UserMapper(UserMapper userMapper){
+        this.userMapper=userMapper;
+    }
     @Override
     public void regist(String uname,String pwd) {
         User u=userMapper.queryByName(uname);
@@ -48,6 +49,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserInfo(User u) {
-
+         int count=userMapper.update(u);
+         if(count==0){
+             throw new updateError("操作失败，请重试");
+         }
     }
 }

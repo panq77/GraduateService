@@ -16,8 +16,12 @@ import pq.empm.service.UserService;
 public class TestJDBC {
     @Autowired
     private UserService userService;
-    @Autowired
     private UserMapper userMapper;
+
+    @Autowired(required = false)
+    void UserMapper(UserMapper userMapper){
+        this.userMapper=userMapper;
+    }
     @Test
     public void qname(){
         User pq = userService.login("ahh","123321");
@@ -32,8 +36,10 @@ public class TestJDBC {
     public void update(){
         User u=new User();
         u.setUid(2);
+        u.setUname("mmmmmm");
         u.setGender(1);
-        u.setAge(21);
+        u.setAge(1);
+        u.setPwd("77777");
         userMapper.update(u);
 
     }

@@ -22,6 +22,9 @@ public abstract class BaseController {
         }else if( e instanceof PwdNotMatch){
             jr.setMessage(e.getMessage());
             jr.setCode(23);
+        }else if(e instanceof updateError){
+            jr.setMessage(e.getMessage());
+            jr.setCode(24);
         }
         return jr;
     }

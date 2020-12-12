@@ -7,11 +7,16 @@ import pq.empm.model.User;
 import pq.empm.service.UserService;
 import pq.empm.util.JsonResult;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("users")
 public class UserController extends BaseController{
-    @Autowired
     private UserService userService;
+    @Autowired
+    public void UserService(UserService userService){
+        this.userService=userService;
+    }
     @RequestMapping("reg")
     public JsonResult<Void> regist(String uname,String pwd){
                userService.regist(uname,pwd);
@@ -19,11 +24,18 @@ public class UserController extends BaseController{
 
     }
     @RequestMapping("login")
-    public JsonResult<User> login(String uname, String pwd){
+    public JsonResult<User> login(HttpSession session,String uname, String pwd){
          User u=userService.login(uname,pwd);
+         session.setAttribute(u.getUname(),u);
          return new JsonResult<User>(u);
     }
 
-
+    @RequestMapping("updateUserInfo")
+    public JsonResult<Void> updateInfo(HttpSession session,User u){
+        userService.updateUserInfo(u);
+        u.setPwd(null);
+        session.setAttribute(u.getUname(),u);
+        return new JsonResult<Void>();
+    }
 
 }
