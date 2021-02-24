@@ -3,7 +3,7 @@ package pq.empm.controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pq.empm.ex.*;
-import pq.empm.util.JsonResult;
+import pq.empm.vo.JsonResult;
 
 public abstract class BaseController {
     @ExceptionHandler(BaseEx.class)
@@ -11,21 +11,31 @@ public abstract class BaseController {
     public JsonResult<Void> handlerException(Throwable e) {
         JsonResult<Void> jr = new JsonResult<>();
         if(e instanceof UserExist){
-            jr.setCode(20);
-            jr.setMessage(e.getMessage());
+           setError(jr,e);
         }else if (e instanceof Inserterror){
-            jr.setMessage(e.getMessage());
-            jr.setCode(21);
+            setError(jr,e);
         }else if(e instanceof UserNoFound){
-            jr.setCode(22);
-            jr.setMessage(e.getMessage());
+            setError(jr,e);
         }else if( e instanceof PwdNotMatch){
-            jr.setMessage(e.getMessage());
-            jr.setCode(23);
+            setError(jr,e);
         }else if(e instanceof updateError){
-            jr.setMessage(e.getMessage());
-            jr.setCode(24);
+            setError(jr,e);
+        }else if(e instanceof JobNotExist){
+            setError(jr,e);
+        }else if(e instanceof FileSuffixNotMatch){
+            setError(jr,e);
         }
+        else if(e instanceof FileUploadError){
+            setError(jr,e);
+        }
+        else if(e instanceof ResumeHasDel){
+            setError(jr,e);
+        }
+
         return jr;
+    }
+    private void setError(JsonResult<Void> jr,Throwable e){
+        jr.setMessage(e.getMessage());
+        jr.setCode(123);
     }
 }

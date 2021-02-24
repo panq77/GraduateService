@@ -1,4 +1,4 @@
-package pq.empm.util;
+package pq.empm.vo;
 
 public class JsonResult<T> {
     private String message;

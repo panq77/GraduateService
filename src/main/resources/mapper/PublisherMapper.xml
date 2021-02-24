@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pq.empm.dao.PublisherMapper">
+  <resultMap id="BaseResultMap" type="pq.empm.model.Publisher">
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="commpany" jdbcType="VARCHAR" property="commpany" />
+  </resultMap>
+  <select id="queryByName" resultMap="BaseResultMap">
+    select pid,name,pwd,nickname,phone,email,commpany from publisher where name=#{name}
+  </select>
+  <insert id="insert" parameterType="pq.empm.model.Publisher" >
+    insert into publisher (pid, name, pwd,nickname,
+      phone, email, commpany
+      )
+    values (#{pid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},
+      #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{commpany,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="update" parameterType="pq.empm.model.Publisher">
+    update publisher
+    <trim prefix="set" suffix="where pid = #{pid}" prefixOverrides=",">
+      <if test="name != null">
+        name=#{name},
+      </if>
+      <if test="pwd != null">
+        pwd=#{pwd},
+      </if>
+      <if test="nickname != null">
+        nickname=#{nickname},
+      </if>
+      <if test="phone != null">
+        phone=#{phone},
+      </if>
+      <if test="email != null">
+        email=#{email},
+      </if>
+      <if test="commpany != null">
+        commpany=#{commpany},
+      </if>
+        pid=#{pid}
+    </trim>
+  </update>
+</mapper>

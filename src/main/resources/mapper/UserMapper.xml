@@ -20,6 +20,9 @@
         <if test="uname != null">
           uname=#{uname},
         </if>
+        <if test="pwd != null">
+          pwd=#{pwd},
+        </if>
         <if test="age != null">
           age=#{age},
         </if>

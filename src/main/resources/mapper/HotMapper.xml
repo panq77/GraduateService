@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pq.empm.dao.HotMapper">
+    <resultMap id="BaseResultMap" type="pq.empm.model.Hot">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="jid" jdbcType="VARCHAR" property="jid"/>
+        <result column="jname" jdbcType="VARCHAR" property="jname"/>
+        <result column="jcommpany_name" jdbcType="VARCHAR" property="jcommpanyName"/>
+        <result column="type_c" jdbcType="VARCHAR" property="typeC"/>
+        <result column="jcommpany_type" jdbcType="VARCHAR" property="jcommpanyType"/>
+        <result column="jarea" jdbcType="VARCHAR" property="jarea"/>
+        <result column="click_times" jdbcType="INTEGER" property="clickTimes"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+    </resultMap>
+    <insert id="insert" parameterType="pq.empm.model.Hot">
+        insert into hot (id, jid, jname,
+                         jcommpany_name, type_c, jcommpany_type,
+                         jarea, click_times, time)
+        values (#{id,jdbcType=BIGINT}, #{jid,jdbcType=VARCHAR}, #{jname,jdbcType=VARCHAR},
+                #{jcommpanyName,jdbcType=VARCHAR}, #{typeC,jdbcType=VARCHAR}, #{jcommpanyType,jdbcType=VARCHAR},
+                #{jarea,jdbcType=VARCHAR}, #{clickTimes,jdbcType=INTEGER}, #{time,jdbcType=TIMESTAMP})
+    </insert>
+    <resultMap id="hot" type="Map">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="jid" jdbcType="VARCHAR" property="jid"/>
+        <result column="jcommpany_name" jdbcType="VARCHAR" property="jcommpanyName"/>
+        <result column="jcommpany_type" jdbcType="VARCHAR" property="jcommpanyType"/>
+        <result column="type_c" jdbcType="VARCHAR" property="typeC"/>
+        <result column="time" jdbcType="TIMESTAMP" property="time"/>
+        <result column="sum(click_times)" jdbcType="BIGINT" property="num"/>
+    </resultMap>
+    <select id="selectHotIndustry" resultMap="hot">
+        select id,
+               jid,
+               jcommpany_type ,
+               time,
+               sum(click_times) as sum
+        from hot
+        where DATEDIFF(DATE_FORMAT(time, '%Y-%m-%d'), '2021-02-24') = 0
+        group by jcommpany_type
+        order by sum
+        limit 1,5
+    </select>
+    <select id="selectHotJobType" resultMap="hot">
+        select id, jid, type_c , sum(click_times) sum
+        from hot
+        where DATEDIFF(DATE_FORMAT(time, '%Y-%m-%d'), '2021-02-24') = 0
+        group by type_c
+        order by sum
+        limit 1,5
+    </select>
+    <select id="selectHotCommpany" resultMap="hot" >
+        select id,jid,jcommpany_name,sum(click_times) sum
+               from hot
+        where DATEDIFF(DATE_FORMAT(time, '%Y-%m-%d'), '2021-02-24') = 0
+        group by jcommpany_name
+        order by sum
+        limit 1,5
+    </select>
+    <select id="selectHotArea" resultMap="hot" >
+        select id,jid,jarea,sum(click_times) sum
+        from hot
+        where DATEDIFF(DATE_FORMAT(time, '%Y-%m-%d'), '2021-02-24') = 0
+        group by jarea
+        order by sum
+        limit 1,5
+    </select>
+</mapper>

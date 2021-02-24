@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pq.empm.dao.ResumeMapper">
+  <resultMap id="BaseResultMap" type="pq.empm.model.Resume">
+    <id column="rid" jdbcType="INTEGER" property="rid" />
+    <result column="newName" jdbcType="VARCHAR" property="newname" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="jid" jdbcType="VARCHAR" property="jid" />
+    <result column="jname" jdbcType="VARCHAR" property="jname" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="stat" jdbcType="VARCHAR" property="stat" />
+  </resultMap>
+  <select id="getListById" resultMap="BaseResultMap" >
+    select rid,name,jname from resume where pid=#{pid}
+  </select>
+  <update id="updateStat" parameterType="pq.empm.model.Resume" >
+    update resume set stat=1 where rid=#{rid}
+  </update>
+  <delete id="deleteById" parameterType="pq.empm.model.Resume">
+       delete from resume where rid=#{rid}
+  </delete>
+
+  <select id="queryById" resultMap="BaseResultMap">
+    select  rid,newName,name,url from resume where rid=#{rid}
+  </select>
+
+  <insert id="insert" parameterType="pq.empm.model.Resume">
+    insert into resume (rid, newName, name,
+      uid, pid, jid, jname,
+      url, stat)
+    values (#{rid,jdbcType=INTEGER}, #{newname,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+      #{uid,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{jid,jdbcType=VARCHAR}, #{jname,jdbcType=VARCHAR},
+      #{url,jdbcType=VARCHAR}, #{stat,jdbcType=VARCHAR})
+  </insert>
+
+
+</mapper>
