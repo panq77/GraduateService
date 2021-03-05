@@ -20,6 +20,33 @@
     <result column="jcommpany_intro" jdbcType="VARCHAR" property="jcommpanyIntro" />
     <result column="pid" jdbcType="INTEGER" property="pid" />
   </resultMap>
+  <resultMap id="type" type="Map">
+    <result column="type_c" jdbcType="VARCHAR" property="typeC" />
+  </resultMap>
+  <resultMap id="CommpanyType" type="Map">
+    <result column="jcommpany_type" jdbcType="VARCHAR" property="jcommpanyType" />
+  </resultMap>
+  <select id="queryCommpanyType" resultMap="CommpanyType">
+    SELECT job.jcommpany_type from job
+    GROUP BY job.jcommpany_type
+  </select>
+  <select id="queryTypeCByTypeB" resultMap="type">
+    SELECT type_c from job
+    where type_b=#{typeB}
+    GROUP BY type_c
+  </select>
+  <select id="queryHotJob" parameterType="java.util.List" resultMap="BaseResultMap">
+    select jid,name,type_a,type_b,type_c,salary,experience,education,jcommpany_name,jcommpany_type,
+           jcommpany_scale,jarea,pid from job
+     where jid in
+     <foreach collection="list" item="jidList" open="(" close=")" separator=",">
+       #{jidList}
+     </foreach>
+  </select>
+  <select id="queryJobType" resultType="java.lang.String">
+    select type_c from job
+    where jid=#{jid}
+  </select>
   <select id="queryAll" resultMap="BaseResultMap" >
     select jid,name,type_a,type_b,type_c,salary,experience,education,jcommpany_name,jcommpany_type,
            jcommpany_scale,jarea,interviewer,job_duty,job_request,jcommpany_intro,pid
@@ -29,8 +56,8 @@
     select count(*)from job
   </select>
   <select id="queryDetailById" resultMap="BaseResultMap" >
-    select jid,name,salary,jcommpany_name,jcommpany_type,
-           jarea,interviewer,job_duty,job_request,jcommpany_intro
+    select jid,name,type_c,salary,jcommpany_name,jcommpany_type,
+           jarea,interviewer,job_duty,job_request,jcommpany_intro,pid
     from job where jid=#{jid}
   </select>
   <select id="queryById" resultMap="BaseResultMap" >

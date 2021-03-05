@@ -7,5 +7,7 @@ import pq.empm.model.User;
 public interface UserService {
     public void regist(String uname,String pwd);
     public User login(String uname,String pwd);
-    public void updateUserInfo(User u);
+    public User updateUserInfo(User u);
+
+    User queryInfo(String uname);
 }

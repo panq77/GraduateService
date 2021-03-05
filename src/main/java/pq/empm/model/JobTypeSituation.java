@@ -9,17 +9,17 @@ public class JobTypeSituation {
 
     private Integer mailing;
 
-    private Integer clickTimes;
+
 
     public JobTypeSituation() {
     }
 
-    public JobTypeSituation(Long id, String typeC, String education, Integer mailing, Integer clickTimes) {
+    public JobTypeSituation(Long id, String typeC, String education, Integer mailing) {
         this.id = id;
         this.typeC = typeC;
         this.education = education;
         this.mailing = mailing;
-        this.clickTimes = clickTimes;
+
     }
 
     @Override
@@ -29,7 +29,7 @@ public class JobTypeSituation {
                 ", typeC='" + typeC + '\'' +
                 ", education='" + education + '\'' +
                 ", mailing=" + mailing +
-                ", clickTimes=" + clickTimes +
+
                 '}';
     }
 
@@ -65,11 +65,6 @@ public class JobTypeSituation {
         this.mailing = mailing;
     }
 
-    public Integer getClickTimes() {
-        return clickTimes;
-    }
 
-    public void setClickTimes(Integer clickTimes) {
-        this.clickTimes = clickTimes;
-    }
+
 }

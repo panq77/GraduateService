@@ -15,6 +15,12 @@ public class Publisher {
 
     private String commpany;
 
+    public Publisher() {
+    }
+
+    public Publisher(String name, String pwd) {
+    }
+
     public Integer getPid() {
         return pid;
     }

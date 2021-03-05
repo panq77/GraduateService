@@ -16,7 +16,7 @@
   </resultMap>
   <update id="update" parameterType="pq.empm.model.User">
       update e_user
-      <trim prefix="set" suffix="where uid = #{uid}" prefixOverrides="," >
+      <trim prefix="set" suffix="where uname = #{uname}" suffixOverrides=","  >
         <if test="uname != null">
           uname=#{uname},
         </if>
@@ -47,7 +47,10 @@
         <if test="hasExperience != null">
           has_experience=#{hasExperience},
         </if>
-        uid=#{uid}
+        <if test="uid != null">
+          uid=#{uid}
+        </if>
+
       </trim>
 
 

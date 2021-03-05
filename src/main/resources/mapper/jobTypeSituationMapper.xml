@@ -16,16 +16,14 @@
       #{mailing,jdbcType=INTEGER}, #{clickTimes,jdbcType=INTEGER})
   </insert>
   <resultMap id="situation" type="Map">
-    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="type_c" jdbcType="VARCHAR" property="typeC" />
     <result column="education" jdbcType="VARCHAR" property="education" />
     <result column="sum(mailing)" jdbcType="INTEGER" property="mailing"/>
-    <result column="sum(click_times)" jdbcType="INTEGER" property="clickTimes"/>
   </resultMap>
    <select id="selectSituation" resultMap="situation">
-          select id,type_c,education,sum(mailing),sum(click_times) from job_type_situation
-          where type_c=#{text}
-      group by type_c, education
+       select type_c,education,sum(mailing) from job_type_situation
+       where type_c=#{text}
+       group by type_c, education
    </select>
 
 </mapper>

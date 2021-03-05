@@ -12,7 +12,7 @@ import pq.empm.ex.JobNotExist;
 import pq.empm.model.Job;
 import pq.empm.service.SearchService;
 import pq.empm.util.MapperUtil;
-import pq.empm.util.SearchCondition;
+import pq.empm.vo.SearchCondition;
 import pq.empm.vo.EsJob;
 
 import java.io.IOException;
@@ -23,12 +23,19 @@ import java.util.List;
 public class SearchServiceImpl implements SearchService {
     private static String indexName="job";
     private static String type="job";
-    @Autowired
+    @Autowired(required = false)
     private JestClient jestClient;
 
     @Override
     public List<Job> search(SearchCondition searchCondition) {
-        ArrayList<Job> jobs = new ArrayList<>();
+        String jcommpanyType = searchCondition.getJcommpanyType();
+        String education = searchCondition.getEducation();
+        String salary = searchCondition.getSalary();
+        String jarea = searchCondition.getJarea();
+        String type = searchCondition.getType();
+        String text = searchCondition.getText();
+        String jcommpanyScale = searchCondition.getJcommpanyScale();
+        List<Job> jobs = new ArrayList<>();
         Integer page = searchCondition.getPage();
         Integer rows = searchCondition.getRows();
         int size=rows;
@@ -36,31 +43,31 @@ public class SearchServiceImpl implements SearchService {
         SearchSourceBuilder searchSourceBuilder=new SearchSourceBuilder();
         searchSourceBuilder.from(from);
         searchSourceBuilder.size(size);
-        BoolQueryBuilder queryBuilder= QueryBuilders.boolQuery();
-        if (searchCondition.getText()!=null){
-            System.out.println(!"".equals(searchCondition.getText()));
-            queryBuilder.must(QueryBuilders.matchQuery("jname",searchCondition.getText()));
+        BoolQueryBuilder queryBuilder= new BoolQueryBuilder();
+        if (!"空".equals(text)){
+            queryBuilder.must(QueryBuilders.matchQuery("jname",text));
         }
-        if (searchCondition.getType()!=null){
-            queryBuilder.must(QueryBuilders.matchQuery("TypeC",searchCondition.getType()));
+
+        if (!"空".equals(type)){
+                queryBuilder.must(QueryBuilders.matchQuery("TypeC", type));
         }
-        if (searchCondition.getEducation()!=null){
-            queryBuilder.must(QueryBuilders.matchQuery("education",searchCondition.getEducation()));
+        if (!"不限".equals(education)){
+            queryBuilder.must(QueryBuilders.matchQuery("education",education));
         }
-        if (searchCondition.getJarea()!=null){
-            queryBuilder.must(QueryBuilders.matchQuery("jarea",searchCondition.getJarea()));
+        if (!"全国".equals(jarea)){
+            queryBuilder.must(QueryBuilders.matchQuery("jarea",jarea));
         }
-        if (searchCondition.getSalary()!=null){
-            queryBuilder.must(QueryBuilders.matchQuery("salary",searchCondition.getSalary()));
+        if (!"不限".equals(salary)){
+            queryBuilder.must(QueryBuilders.matchQuery("salary",salary));
         }
-        if (searchCondition.getJcommpanyType()!=null){
-            queryBuilder.must(QueryBuilders.matchQuery("jcommpanyType",searchCondition.getJcommpanyType()));
+        if (!"不限".equals(jcommpanyType)){
+            queryBuilder.must(QueryBuilders.matchQuery("jcommpanyType",jcommpanyType));
         }
-        if (searchCondition.getJcommpanyScale()!=null){
-            queryBuilder.must(QueryBuilders.matchQuery("commpanyScale",searchCondition.getJcommpanyScale()));
+        if (!"不限".equals(jcommpanyScale)){
+            queryBuilder.must(QueryBuilders.matchQuery("commpanyScale",jcommpanyScale));
         }
         searchSourceBuilder.query(queryBuilder);
-        Search search=new Search.Builder(searchSourceBuilder.toString()).addIndex(indexName).addType(type).build();
+        Search search=new Search.Builder(searchSourceBuilder.toString()).addIndex(indexName).addType(SearchServiceImpl.type).build();
         try {
             JestResult jestResult=jestClient.execute(search);
 
@@ -73,6 +80,7 @@ public class SearchServiceImpl implements SearchService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         if(jobs.size()==0){
             throw new JobNotExist("没有下一页了");
         }

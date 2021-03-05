@@ -31,7 +31,9 @@ public abstract class BaseController {
         else if(e instanceof ResumeHasDel){
             setError(jr,e);
         }
-
+        else if(e instanceof NoVisit){
+            setError(jr,e);
+        }
         return jr;
     }
     private void setError(JsonResult<Void> jr,Throwable e){

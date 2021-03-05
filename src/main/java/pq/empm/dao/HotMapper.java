@@ -1,5 +1,6 @@
 package pq.empm.dao;
 
+import org.apache.ibatis.annotations.Param;
 import pq.empm.model.Hot;
 
 import java.util.List;
@@ -16,4 +17,8 @@ public interface HotMapper {
     List<Map> selectHotCommpany();
 
     List<Map> selectHotArea();
+
+    int selectClickTimesByType(String text);
+
+    List<String> queryTop(@Param("start") int start,@Param("end") int end);
 }

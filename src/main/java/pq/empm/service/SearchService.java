@@ -1,7 +1,7 @@
 package pq.empm.service;
 
 import pq.empm.model.Job;
-import pq.empm.util.SearchCondition;
+import pq.empm.vo.SearchCondition;
 
 import java.util.List;
 

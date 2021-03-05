@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../bootstrap3/js/holder.js"></script>
+    <link href="../bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <script src="../bootstrap3/jquery-1.8.3.min.js"></script>
+    <script src="../js/menu.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/jquery-getUrlParam.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <style>
+        html {
+            height: 100%
+        }
+        .head{
+            height: 200px;
+            background: rgba(102, 79, 96, 0.75);
+        }
+        .main{
+            margin-left: 40px;
+            height: 100%;
+            background: rgba(194, 172, 6, 0.04);
+        }
+        body {
+            margin: 0;
+            height: 100%;
+            background: #ebeeed;
+        }
+
+    </style>
+
+
+</head>
+
+<body>
+<div class="head">
+<header class="header">
+
+    <div class="row">
+        <div class="col-md-3">
+
+        </div>
+        <!--快捷选项-->
+        <div class="col-md-9 top-item">
+            <ul class="list-inline pull-right">
+                <li style="font-size: 20px"><a  href="updateInfo.html">&nbsp;个人信息</a></li>
+                <li class="li-split">|</li>
+                <li style="font-size: 20px"><a id="logInfo" style="display: block" href="login.html">&nbsp;登录</a></li>
+                <li style="font-size: 20px"><a id="username" href="javascript:void(0)"></a></li>
+                <li class="li-split">|</li>
+                <li style="font-size: 20px"><a id="logout" style="display: block" href="javascript:void(0)" onclick="logout()">退出</a></li>
+
+            </ul>
+        </div>
+    </div>
+</header>
+    <div style="display: inline ">
+        <div style="margin-left: 50px">
+
+        <label id="jname" style="font-size:40px;margin-top: 20px">dadasdadada</label>
+        <label id="interviewer" style="font-size:25px;margin-top: 40px;margin-left: 40px">面试主管</label>
+       <label id="jcommpany_name" style="font-size:25px;margin-top: 40px;margin-left: 200px">江苏企业集团</label>
+            <label id="jcommpany_type" style="font-size:25px;margin-top: 40px;margin-left: 10px;">沐浴大树天气二点</label>
+        </div>
+        <div style="margin-left: 50px;font-size: 35px;">
+            <label id="jarea">上海</label>
+            <label id="salary" style="margin-left: 20px">2-10k</label>
+            <label id="type"  style="margin-left: 20px;font-size:25px">Java</label>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <label style="font-size: 30px">岗位职责</label>
+    <div><label id="job_duty">dsadad</label></div>
+    <label style="font-size: 30px">岗位需求</label>
+    <div><label id="job_request">dsadad</label></div>
+    <label style="font-size: 30px">企业介绍</label>
+    <div><label id="jcommpany_intro">dsadad</label></div>
+    <div id="mailDiv" style="float: right;margin-right: 400px">
+
+
+        <input type="file" id="file" name="file" onchange="fileUpload()" style="display:none">
+        <input id="mail" class="btn btn-primary" type="button" onclick="select_file()" value="投递简历" />
+    </div>
+
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        let jid = $.getUrlParam("jid");
+        $.ajax({
+            "url":"/job/queryDetail",
+            "type":"post",
+            "data":"jid="+jid,
+            "dataType":"json",
+            "success":function (json) {
+
+                  if (json.code==20){
+                      let data = json.data;
+
+
+
+
+                     document.getElementById("jname").innerText=data.name
+
+                      document.getElementById("salary").innerText=data.salary;
+                      document.getElementById("jarea").innerText=data.jarea;
+                      document.getElementById("jcommpany_type").innerText=data.jcommpanyType;
+
+                      document.getElementById("jcommpany_name").innerText=data.jcommpanyName;
+                      document.getElementById("interviewer").innerText=data.interviewer;
+
+                      document.getElementById("type").innerText=data.typeC;
+
+                      let jobDuty = data.jobDuty;
+                      let jobdutySplit = jobDuty.split('；');
+                      for (let i = 0; i < jobdutySplit.length; i++) {
+
+                          $("#job_duty").append( jobdutySplit[i]+"<br>");
+                      }
+
+                      let jobRequest = data.jobRequest;
+                      let jobRequestSplit = jobRequest.split('；');
+                      for (let i = 0; i < jobRequestSplit.length; i++) {
+                          $("#job_request").append( jobRequestSplit[i]+"<br>");
+                      }
+
+                      $("#jcommpany_intro").val(data.jcommpanyIntro);
+                      let jcommpanyIntro = data.jcommpanyIntro;
+                      let jcommpanyIntroSplit = jcommpanyIntro.split('；');
+                      for (let i = 0; i < jcommpanyIntroSplit.length; i++) {
+                          $("#jcommpany_intro").append( jcommpanyIntroSplit[i]+"<br>");
+                      }
+                      localStorage.removeItem("pid");
+                      localStorage.setItem("pid",data.pid);
+                  }else {
+                      alert("发生未知错误，请重试")
+                  }
+            }
+        });
+        setUserInfo();
+    });
+    function setUserInfo() {
+        $.ajax({
+            "url": "/users/check_login",
+            "type": "post",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.code == 20) {
+                    $("#logInfo").attr("style", "display : none;")
+                    $("#username").text(json.data.uname);
+                }
+            }
+        });
+    }
+  function logout(){
+      $.ajax({
+          "url":"/users/logout",
+          "type":"post",
+          "dataType":"json",
+          "success":function (json) {
+              window.open("login.html");
+          }
+      });
+  };
+    function select_file(){
+        $("#file").trigger("click");
+    }
+
+    function fileUpload(){
+        // 创建formdata对象
+        let formData = new FormData();
+        let jname = document.getElementById("jname").innerText.toString();
+        let jid = $.getUrlParam("jid");
+        let pid = localStorage.getItem("pid");
+        alert(pid);
+       //  给formData对象添加<input>标签,注意与input标签的ID一致
+        formData.append('file', $('#file')[0].files[0]);
+        formData.append("jid",jid);
+        formData.append("pid",pid);
+        formData.append("jname",jname);
+        $.ajax({
+            url : '/resume/mailing',
+            type : 'POST',
+            data : formData,
+            contentType: false,// 当有文件要上传时，此项是必须的，否则后台无法识别文件流的起始位置
+            processData: false,// 是否序列化data属性，默认true(注意：false时type必须是post)
+            dataType: 'json',
+            clearForm: true,//提交后是否清空表单数据
+            success: function(json) {   //提交成功后自动执行的处理函数，参数data就是服务器返回的数据。
+                if (json.code==20){
+                    alert('上传成功');
+                }
+            }
+        });
+    }
+
+
+</script>
+
+</html>

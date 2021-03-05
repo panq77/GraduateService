@@ -22,17 +22,15 @@ public class UserController extends BaseController{
         this.userService=userService;
     }
     @RequestMapping("reg")
-    public JsonResult<Void> regist(String uname,String pwd){
-               userService.regist(uname,pwd);
-
+    public JsonResult<Void> regist(String name,String pwd){
+               userService.regist(name,pwd);
            return  new JsonResult<Void>();
 
     }
     @RequestMapping("login")
-    public JsonResult<User> login(HttpSession session,String uname, String pwd) throws JsonProcessingException {
-         User u=userService.login(uname,pwd);
+    public JsonResult<User> login(HttpSession session,String name, String pwd) throws JsonProcessingException {
+         User u=userService.login(name,pwd);
          session.setAttribute("username",u);
-         log.info(MapperUtil.MP.writeValueAsString(u));
          return new JsonResult<User>(u);
     }
     @RequestMapping("logout")
@@ -40,19 +38,40 @@ public class UserController extends BaseController{
         request.getSession().invalidate();
         return new JsonResult<Void>();
     }
-    @RequestMapping("updateUserInfo")
+    @RequestMapping("update_user_info")
     public JsonResult<Void> updateInfo(HttpSession session,User u){
         User user = (User) session.getAttribute("username");
-        u.setUid(user.getUid());
-        userService.updateUserInfo(u);
-        u.setPwd(null);
-        session.setAttribute("username",u);
+
+        User user1 = userService.updateUserInfo(u);
+        user1.setPwd(null);
+
+
+        if (user!=null){
+            session.setAttribute("username",user1);
+        }
         return new JsonResult<Void>();
     }
-//    @RequestMapping("test")
-//    public JsonResult<Void> test(HttpSession session){
-//        User u = (User) session.getAttribute("pq");
-//        System.out.println(u);
-//        return new JsonResult<>();
-//    }
+    @RequestMapping("query_info")
+    public JsonResult<User> getUserInfo(String uname){
+        User u=userService.queryInfo(uname);
+
+         return new JsonResult<>(u);
+    }
+    @RequestMapping("test")
+    public JsonResult<Void> test(HttpSession session){
+        User u = (User) session.getAttribute("username");
+
+        return new JsonResult<>();
+    }
+    @RequestMapping("check_login")
+    public JsonResult<User> checkLogin(HttpSession session){
+        User username = (User) session.getAttribute("username");
+        if (username!=null){
+            return new JsonResult<>(username);
+        }else {
+            JsonResult<User> jr = new JsonResult<>();
+            jr.setCode(203);
+            return  jr;
+        }
+    }
 }

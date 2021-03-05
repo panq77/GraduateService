@@ -1,5 +1,7 @@
 package pq.empm.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,8 +9,11 @@ import org.springframework.web.multipart.MultipartFile;
 import pq.empm.model.Publisher;
 import pq.empm.model.Resume;
 import pq.empm.model.User;
+import pq.empm.service.JobService;
 import pq.empm.service.ResumeService;
+import pq.empm.util.MapperUtil;
 import pq.empm.vo.JsonResult;
+import pq.empm.vo.LogData;
 import pq.empm.vo.ReceiveItem;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,19 +21,31 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/resume")
 public class ResumeController extends BaseController {
     @Autowired
     private ResumeService resumeService;
 
+    @Autowired
+    private JobService jobService;
+    //resume : jid jname pid
     @RequestMapping("/mailing")
-    public JsonResult<Void> mailResume(HttpSession session, Resume resume, MultipartFile file) {
+    public JsonResult<Void> mailResume(HttpSession session, Resume resume, MultipartFile file) throws JsonProcessingException {
 
         User user = (User) session.getAttribute("username");
         resume.setUid(user.getUid());
         resumeService.uploadResume(resume, file);
+        /**
+         * 记入日志系统
+         * */
+        String typeC=jobService.queryJobType(resume.getJid());
+
+        log.info(MapperUtil.MP.writeValueAsString(new LogData(  user.getUid(),user.getUname(),user.getAge(),
+                user.getGender(),user.getExpectedJob(),user.getExpectedEara(),
+                user.getEducation(),user.getHasExperience().toString(),"mailing_job", resume.getJid(),resume.getJname(),typeC,resume.getPid())));
+
         return new JsonResult<>();
     }
 

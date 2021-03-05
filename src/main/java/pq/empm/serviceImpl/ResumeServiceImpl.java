@@ -70,6 +70,7 @@ private ResumeMapper resumeMapper;
         resume.setStat("0");
         resume.setNewname(newFileName);
         resumeMapper.insert(resume);
+        return;
     }
 
     @Override

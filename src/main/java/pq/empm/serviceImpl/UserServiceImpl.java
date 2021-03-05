@@ -2,7 +2,6 @@ package pq.empm.serviceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pq.empm.dao.UserMapper;
 import pq.empm.ex.*;
 import pq.empm.model.User;
@@ -53,17 +52,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserInfo(User u) {
+    public User updateUserInfo(User u) {
         User user = userMapper.queryByName(u.getUname());
         if (user != null) {
-            if(u.getUname()==user.getUname()){
-                throw new UserExist("该用户名已存在");
-            }
+              if (MD5Util.md5(u.getPwd()).equals(user.getPwd())){
+                  throw new UserExist("该用户名已存在");
+              }
         }
         u.setPwd(MD5Util.md5(u.getPwd()));
         int count = userMapper.update(u);
         if (count == 0) {
             throw new updateError("操作失败，请重试");
         }
+        User user1 = queryInfo(u.getUname());
+        return user1;
+    }
+
+    @Override
+    public User queryInfo(String uname) {
+        return userMapper.queryByName(uname);
     }
 }

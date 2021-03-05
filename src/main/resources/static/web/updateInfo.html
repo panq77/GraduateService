@@ -1,0 +1,191 @@
+<html>
+	<head>
+		<title>表单页面</title>
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" type="text/css" href="../css/update.css" />
+		<link rel="stylesheet" type="text/css" href="../css/index.css"/>
+
+		<script src="../bootstrap3/js/holder.js"></script>
+		<link href="../bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css">
+		<script src="../bootstrap3/jquery-1.9.1.min.js"></script>
+		<script src="../bootstrap3/js/bootstrap.js"></script>
+		<!-- 字体图标 -->
+		<link rel="stylesheet" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../css/top.css" />
+		<link rel="stylesheet" type="text/css" href="../css/index.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
+
+		<link rel="stylesheet" type="text/css" href="../css/footer.css" />
+
+		<script src="../js/jquery-getUrlParam.js" type="text/javascript"></script>
+	</head>
+	<body style="background-image:url(../images/index/bg1.jpg); ">
+	<div class="container  text-left">
+	<div class="update" style="margin-top: 50px;margin-left: 200px">
+		<p>更新信息</p>
+	<form  id="form-update" class="form-horizontal" role="form">
+		<!--用户名-->
+		<div class="form-group">
+			<label  class="col-md-2 control-label">名字：</label>
+			<div class="col-md-4">
+				<input id="uname"  name="uname" readonly  type="text" class="form-control"  >
+			</div>
+			<label class="col-md-2 control-label">原密码:</label>
+			<div class="col-md-4">
+				<input  name="pwd" type="password" class="form-control" >
+			</div>
+		</div>
+		<div class="form-group">
+			<label  class="col-md-2 control-label">年龄：</label>
+			<div class="col-md-4">
+				<input id="age" name="age"  type="text" class="form-control"  >
+			</div>
+			<label class="col-md-2 control-label"> 性别：</label>
+			<div class="col-md-4">
+				<input id="nan" class="radio-inline" type="radio" name="gender" value="0"/>男
+				<input id="nv" class="radio-inline"  type="radio" name="gender" value="1"/>女
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label  class="col-md-2 control-label">电话：</label>
+			<div class="col-md-4">
+				<input id="phone" name="phone"  type="text" class="form-control"  >
+			</div>
+			<label class="col-md-2 control-label"> 邮箱：</label>
+			<div class="col-md-4">
+				<input id="email" name="email" type="text" class="form-control" >
+			</div>
+		</div>
+		<div class="form-group">
+			<label  class="col-md-2 control-label" >职位：</label>
+			<div class="col-md-4">
+				<input id="expectedJob" name="expectedJob"  type="text" class="form-control"  >
+			</div>
+			<label class="col-md-2 control-label"> 地点：</label>
+			<div class="col-md-4">
+				<input id="expectedEara" name="expectedEara" type="text" class="form-control" >
+			</div>
+		</div>
+		<div class="form-group">
+			<label  class="col-md-2 control-label" >学历：</label>
+			<div class="col-md-4">
+				<input id="education" name="education"  type="text" class="form-control"  >
+			</div>
+			<label class="col-md-2 control-label"> 经验：</label>
+			<div class="col-md-4">
+				<input id="NoEx" class="radio-inline" type="radio" name="hasExperience" value="0"/>无
+				<input id="hasEx" class="radio-inline"  type="radio" name="hasExperience" value="1"/>有
+			</div>
+		</div>
+
+		<!--提交按钮-->
+
+		<div class="form-group">
+			<div class="col-md-4" style="float: right">
+				<span  class="pull-right"><a id="login" style=" display: none" href="login.html">去登录</a></span>
+				<span class="pull-right"><a  id="back" style=" display: none" href="index.html">返回</a></span>
+			</div>
+			<div class="col-md-4" style="float: right">
+				<input  class="btn btn-primary" type="reset" value="重置" />
+			</div>
+			<div class="col-md-4" style="float: right">
+				<input  id="btn-update"  class="btn btn-primary" type="button" value="更新" />
+			</div>
+
+		</div>
+
+	</form>
+	</div>
+	</div>
+	<script type="text/javascript">
+		$(function () {
+			let  sessionData;
+			$.ajax({
+				"url":"/users/check_login",
+				"type":"post",
+				"dataType":"json",
+				"success":function (json) {
+					if (json.code==20){
+						sessionData=json.data;
+						$("#back").attr("style","display : block;");
+					}else {
+						$("#login").attr("style","display : block;");
+					}
+				}
+			});
+            let uname = $.getUrlParam("uname");
+			if (uname!=null){
+				$.ajax({
+					"url":"/users/query_info",
+					"data":"uname="+uname,
+					"type":"post",
+					"dataType":"json",
+					"success":function (json) {
+						let data = json.data;
+						$("#uname").val(data.uname);
+						$("#age").val(data.age);
+						let genderId=json.data.gender==0?"nan":"nv"; // 0/1
+						$("#"+genderId).attr("checked","checked");
+						$("#phone").val(data.phone);
+						$("#email").val(data.email);
+						$("#expectedEara").val(data.expectedEara);
+						$("#expectedJob").val(data.expectedJob);
+						$("#education").val(data.education);
+						let exId=json.data.hasExperience==0?"noEx":"hasEx";
+						$("#"+exId).attr("checked","checked");
+					}
+				});
+			}else {
+				$.ajax({
+					"url":"/users/check_login",
+					"type":"post",
+					"dataType":"json",
+					"success":function (json) {
+						if (json.code==20){
+							let data = json.data;
+							$("#uname").val(data.uname);
+							$("#age").val(data.age);
+							let genderId=json.data.gender==0?"nan":"nv"; // 0/1
+							$("#"+genderId).attr("checked","checked");
+							$("#phone").val(data.phone);
+							$("#email").val(data.email);
+							$("#expectedEara").val(data.expectedEara);
+							$("#expectedJob").val(data.expectedJob);
+							$("#education").val(data.education);
+							let exId=json.data.hasExperience==0?"noEx":"hasEx";
+							$("#"+exId).attr("checked","checked");
+						}else {
+							alert("请重新登录");
+							window.location.href='login.html';
+						}
+					}
+				});
+			}
+
+
+
+		});
+		$("#btn-update").click(function(){
+
+			$.ajax({
+				"url":"/users/update_user_info",
+				"data":$("#form-update").serialize(),
+				"type":"post",
+				"dataType":"json",
+				"success":function(json){
+					if(json.code==20){
+                             alert("更新成功")
+
+					}else{
+						alert(json.message);
+					}
+				}
+			})
+		})
+
+	</script>
+
+
+	</body>
+</html>

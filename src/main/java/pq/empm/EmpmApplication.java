@@ -8,6 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EmpmApplication {
 
     public static void main(String[] args) {
+
+        //异步记录日志
+        System.setProperty("Log4jContextSelector", "org.apache.logging.log4j.core.async.AsyncLoggerContextSelector");
         SpringApplication.run(EmpmApplication.class, args);
     }
 

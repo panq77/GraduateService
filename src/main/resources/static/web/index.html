@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!--edge浏览器H5兼容设置-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--360浏览器H5兼容设置-->
+    <meta name="renderer" content="webkit"/>
+    <title>毕业生服务推荐系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--导入核心文件-->
+    <script src="../bootstrap3/js/holder.js"></script>
+    <link href="../bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <script src="../bootstrap3/jquery-1.8.3.min.js"></script>
+    <script src="../js/menu.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../js/jquery-getUrlParam.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/jobItem.css"/>
+</head>
+
+<body style="background-image: url(../images/index/bg.jpg);">
+<div>
+    <!--头部-->
+    <header class="header">
+
+        <div class="row">
+            <div class="col-md-3">
+
+            </div>
+            <!--快捷选项-->
+            <div class="col-md-9 top-item">
+                <ul class="list-inline pull-right">
+                    <li><a href="updateInfo.html">&nbsp;个人信息</a></li>
+                    <li class="li-split">|</li>
+                    <li><a id="logInfo" style="display: block" href="login.html">&nbsp;登录</a></li>
+                    <li><a id="username" href="javascript:void(0)"></a></li>
+                    <li class="li-split">|</li>
+                    <li ><a id="logout" style="display: block" href="javascript:void(0)" onclick="logout()">退出</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <!--导航 -->
+    <!--分割导航和顶部-->
+    <div class="row top-nav">
+        <div class="col-md-6" style="font-size: 30px">
+            <ul class="nav nav-pills">
+
+                <li><a href="index.html">找工作</a></li>
+                <li><a href="charts.html">看形势</a></li>
+            </ul>
+        </div>
+        <br><br>
+        &nbsp&nbsp&nbsp&nbsp&nbsp
+
+    </div>
+    <br>
+    <div style="margin-left: 500px">
+        <form id="form_search" action="form_search" class="form-inline " role="form">
+            <div class="form-group">
+                <input type="text" class="form-control" style="margin-bottom: 2px" id="search" name="text"
+                       placeholder="输入关键字"><br>
+            </div>
+            <button id="SearchBtn" type="button" class="btn btn-default btn-sm" value="search"><span
+                    class="fa fa-search">search</span>
+            </button>
+            <br>
+            <div class="form-group" style="margin-top: 1px">
+                <div>
+                    地区:
+                    <input id="all" type="radio" checked  name="jarea" value="全国">全国
+                    <input id="nanjing" type="radio" name="jarea" value="南京">南京
+                    <input id="shanghai" type="radio" name="jarea" value="上海">上海
+                    <input id="beijing" type="radio" name="jarea" value="北京">北京
+                    <input id="hangzhou" type="radio" name="jarea" value="杭州">杭州
+                    <input id="shenzhen" type="radio" name="jarea" value="深圳">深圳
+                    <input id="guangzhou" type="radio" name="jarea" value="广州">广州
+                </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+                <div>
+                    学历:
+                    <select id="education" name="education">
+                        <option value="不限" selected name="education">不限</option>
+                        <option value="大专" name="education">大专</option>
+                        <option value="本科" name="education">本科</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    薪资:
+                    <select id="salary" name="salary">
+                        <option value="不限" selected name="salary">不限</option>
+                        <option value="3-5k" name="salary">3-5k</option>
+                        <option value="3-6k" name="salary">3-6k</option>
+                        <option value="3-7k" name="salary">3-7k</option>
+                        <option value="4-5k" name="salary">4-5k</option>
+                        <option value="4-6k" name="salary">4-6k</option>
+                        <option value="4-7k" name="salary">4-7k</option>
+                        <option value="4-8k" name="salary">4-8k</option>
+                        <option value="5-6k" name="salary">5-6k</option>
+                        <option value="5-7k" name="salary">5-7k</option>
+                        <option value="6-8k" name="salary">6-8k</option>
+                        <option value="6-10k" name="salary">6-10k</option>
+                        <option value="7-10k" name="salary">7-10k</option>
+                        <option value="8-9k" name="salary">8-9k</option>
+                        <option value="10-13k" name="salary">10-13k</option>
+                        <option value="12-15k" name="salary">12-15k</option>
+                        <option value="15-18k" name="salary">15-18k</option>
+                        <option value="20-30k" name="salary">20-30k</option>
+                        <option value="20-40k" name="salary">20-40k</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    企业类型:
+                    <select id="jcommpany_type" name="jcommpanyType">
+                        <option value="不限" selected name="jcommpanyType">不限</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    企业规模:
+                    <select id="jcommpany_scale" name="jcommpanyScale">
+                        <option value="不限" selected name="jcommpanyScale">不限</option>
+                        <option value="20-99人" name="jcommpanyScale">20-99人</option>
+                        <option value="20-100人" name="jcommpanyScale">20-100人</option>
+                        <option value="100-499人" name="jcommpanyScale">100-499人</option>
+                        <option value="500-999人" name="jcommpanyScale">500-999人</option>
+                        <option value="1000-9999人" name="jcommpanyScale">1000-9999人</option>
+                        <option value="10000-99999人" name="jcommpanyScale">10000-99999人</option>
+                        <option value="10000以上" name="jcommpanyScale">10000以上</option>
+
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--头部结束-->
+    <!--导航结束-->
+    <div class="container" style="margin-left: 3px ">
+
+
+        <!--职业类型栏目-->
+        <div class="col-md-2" style="width: 150px;  ">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p class="panel-title">分类搜索</p>
+                </div>
+                <div class="panel-body panel-item" style="letter-spacing: 6px;width: 400px">
+
+                    <table>
+                        <tr>
+                            <td>
+                                <a id="management" href="javascript:void(0)" onclick="openDiv(this.id)">高级管理></a>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a id="technology" href="javascript:void(0)" onclick="openDiv(this.id)">技术&nbsp&nbsp&nbsp
+                                    ></a>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a id="product" href="javascript:void(0)" onclick="openDiv(this.id)">产品&nbsp&nbsp&nbsp
+                                    ></a>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a id="design" href="javascript:void(0)" onclick="openDiv(this.id)">设计&nbsp&nbsp&nbsp
+                                    ></a>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a id="health" href="javascript:void(0)" onclick="openDiv(this.id)">医疗健康></a>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a id="legal" href="javascript:void(0)" onclick="openDiv(this.id)">法律&nbsp&nbsp&nbsp
+                                    ></a>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a id="translation" href="javascript:void(0)" onclick="openDiv(this.id)">翻译&nbsp&nbsp&nbsp
+                                    ></a>
+
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <p class="panel-title">热门岗位</p>
+                </div>
+                <div id="hot-list" style="position: relative; top: 20px">
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div></div>
+    <!--二级div开始-->
+    <div style="display: none;position: relative;z-index: 9999;position: fixed;left: 151px;top: 235px;letter-spacing: 6px"
+         class=" panel panel-default panel-body panel-item " id="managementList" tabindex="0"
+         onmouseleave="hideTwoLevelDiv(this.id)">
+        <a id="highManagement" href="javascript:void(0)" onclick="openNextDiv('高级管理')" name="高级管理">高级管理
+            ></a><br/><br/><br/><br/><br/><br/><br/>
+    </div>
+    <div style="display: none;position: relative;z-index: 9999;position: fixed;left: 151px;top: 235px;letter-spacing: 6px"
+         class=" panel panel-default panel-body panel-item " id="technologyList" tabindex="1"
+         onmouseleave="hideTwoLevelDiv(this.id)">
+        <a id="test" href="javascript:void(0)" onclick="openNextDiv('测试')" name="测试">测试&nbsp&nbsp&nbsp&nbsp
+            ></a><br/>
+        <a id="maintain" href="javascript:void(0)" onclick="openNextDiv('运维')" name="运维">运维&nbsp&nbsp&nbsp&nbsp
+            ></a><br/>
+        <a id="backDevelopment" href="javascript:void(0)" onclick="openNextDiv('后端开发')" name="后端开发">后端开发 ></a><br/>
+        <a id="data" href="javascript:void(0)" onclick="openNextDiv('数据')">数据&nbsp&nbsp&nbsp&nbsp
+            ></a><br/>
+        <a id="hardwareDevelopment" href="javascript:void(0)" onclick="openNextDiv('硬件开发')" name="硬件开发">硬件开发 ></a><br/>
+        <a id="moveDevelopment" href="javascript:void(0)" onclick="openNextDiv('移动开发')" name="移动开发">移动开发 ></a><br/><br/>
+    </div>
+    <div style="display: none;position: relative;z-index: 9999;position: fixed;left: 151px;top: 235px;letter-spacing: 6px"
+         class=" panel panel-default panel-body panel-item " id="productList" tabindex="2"
+         onmouseleave="hideTwoLevelDiv(this.id)">
+        <a id="productManager" href="javascript:void(0)" onclick="openNextDiv('产品经理')" name="产品经理">产品经理
+            ></a><br/><br/><br/><br/><br/><br/><br/>
+    </div>
+    <div style="display: none;position: relative;z-index: 9999;position: fixed;left: 151px;top: 235px;"
+         class=" panel panel-default panel-body panel-item " id="designList" tabindex="3"
+         onmouseleave="hideTwoLevelDiv(this.id)">
+        <a id="mutualDesign" href="javascript:void(0)" onclick="openNextDiv('视觉/交互设计')" name="视觉/交互设计">视觉/交互设计&nbsp
+            ></a><br/>
+        <a id="notMutualDesign" href="javascript:void(0)" onclick="openNextDiv('非视觉设计')" name="非视觉设计">非视觉设计&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            ></a><br/><br/><br/><br/><br/><br/>
+
+    </div>
+    <div style="display: none;position: relative;z-index: 9999;position: fixed;left: 151px;top: 235px;letter-spacing: 6px"
+         class=" panel panel-default panel-body panel-item " id="healthList" tabindex="4"
+         onmouseleave="hideTwoLevelDiv(this.id)">
+        <a id="clinic" href="javascript:void(0)" onclick="openNextDiv('临床试验')" name="临床试验">临床试验 ></a><br/>
+        <a id="doctor" href="javascript:void(0)" onclick="openNextDiv('医生')" name="医生">医生&nbsp&nbsp&nbsp&nbsp ></a><br/>
+        <a id="pharmacy" href="javascript:void(0)" onclick="openNextDiv('生物制药')" name="生物制药">生物制药
+            > </a><br/><br/><br/><br/><br/>
+    </div>
+    <div style="display: none;position: relative;z-index: 9999;position: fixed;left: 151px;top: 235px;letter-spacing: 6px"
+         class=" panel panel-default panel-body panel-item " id="legalList" tabindex="5"
+         onmouseleave="hideTwoLevelDiv(this.id)">
+        <a id="lawyer" href="javascript:void(0)" onclick="openNextDiv('律师')" name="律师">律师&nbsp&nbsp&nbsp&nbsp
+            ></a><br/><br/><br/><br/><br/><br/><br/>
+
+    </div>
+    <div style="display: none;position: relative;z-index: 9999;position: fixed;left: 151px;top: 235px;letter-spacing: 6px"
+         class=" panel panel-default panel-body panel-item " id="translationList" tabindex="6"
+         onmouseleave="hideTwoLevelDiv(this.id)">
+        <a id="translate" href="javascript:void(0)" onclick="openNextDiv('翻译员')" name="翻译员">翻译员&nbsp&nbsp
+            ></a><br/><br/><br/><br/><br/><br/><br/>
+    </div>
+</div>
+<!--二级div结束-->
+<!--三级div开始-->
+<div style="display: none;position: relative;z-index: 9999;position: fixed;left: 285px;top: 235px;letter-spacing: 6px"
+     class=" panel panel-default panel-body panel-item " id="nextList" tabindex="7" onmouseleave="hide(this.id)">
+
+</div>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        showList();
+        queryCommpanyType();
+        $.ajax({
+            "url": "/users/check_login",
+            "type": "post",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.code == 20) {
+                    $("#logInfo").attr("style", "display : none;")
+                    $("#username").text(json.data.uname);
+
+                }
+            }
+        });
+
+
+    });
+
+
+    $("#SearchBtn").click(function () {
+        setPageInfo();
+        localStorage.setItem("page","1");
+        window.location.href = "search.html";
+    });
+
+    function setPageInfo() {
+        if($("#search").val()){
+            localStorage.removeItem("text");
+            localStorage.setItem("text",$("#search").val())
+        }
+        if($("#salary").val()){
+            localStorage.removeItem("salary");
+            localStorage.setItem("salary",$("#salary").val())
+        }
+        if($("#education").val()){
+            localStorage.removeItem("education");
+            localStorage.setItem("education",$("#education").val())
+        }
+        let jarea = $('input:radio:checked').val();
+        localStorage.removeItem("jarea");
+        localStorage.setItem("jarea",jarea)
+        if($("#jcommpany_type").val()){
+            localStorage.removeItem("expectedJob")
+            localStorage.setItem("expectedJob",$("#jcommpany_type").val())
+        }
+        if($("#jcommpany_scale").val()){
+            localStorage.removeItem("jcommpanyScale")
+            localStorage.setItem("jcommpanyScale",$("#jcommpany_scale").val())
+        }
+
+    }
+
+    function hideTwoLevelDiv(obj) {
+        let nextList = document.getElementById("nextList");
+        if (nextList.style.display == "none") {
+            let twoLevelDiv = document.getElementById(obj);
+            twoLevelDiv.style.display = "none";
+        }
+    }
+
+    function hide(obj) {
+        let elementById = document.getElementById(obj);
+        let getTwoLevelId = document.getElementById("getTwoLevelId");
+        let str = getTwoLevelId.innerText.toString()
+        let son = document.getElementsByName(str);
+
+        let parentElement = son[0].parentElement;
+
+        elementById.style.display = "none";
+        parentElement.style.display = "none";
+    }
+
+    function openNextDiv(obj) {
+        let elementById = document.getElementById("nextList");
+        $("#nextList").empty();
+
+        $.ajax({
+            "url": "/job/type",
+            "data": "type=" + obj,
+            "type": "get",
+            "dataType": "json",
+            "success": function (json) {
+
+                let data = json.data;//list
+                let a;
+                for (let i = 0; i < data.length; i++) {
+
+                    a = '<a id="#{jobType}" href="javascript:void(0)" onclick="goSearch(this.id)">#{jobTypeDis}</a><br/>';
+                    a = a.replace("#{jobType}", data[i]["typeC"]);
+                    a = a.replace("#{jobTypeDis}", data[i]["typeC"]);
+                    $("#nextList").append(a);
+                }
+                let span = '<span id="getTwoLevelId" style="display: none">' + obj + '</span>';
+                $("#nextList").append(span);
+                if (elementById.style.display == "none") {
+                    elementById.style.display = "block";
+                }
+
+            }
+        })
+
+    }
+
+    function goSearch(obj) {
+        localStorage.setItem("type", obj);
+        localStorage.removeItem("text");
+        window.open("search.html") ;
+
+    }
+
+    function openDiv(obj) {
+        let div0 = document.getElementById("managementList");
+        div0.style.display = "none";
+        let div1 = document.getElementById("technologyList");
+        div1.style.display = "none";
+        let div2 = document.getElementById("productList");
+        div2.style.display = "none";
+        let div3 = document.getElementById("designList");
+        div3.style.display = "none";
+        let div4 = document.getElementById("healthList");
+        div4.style.display = "none";
+        let div5 = document.getElementById("legalList");
+        div5.style.display = "none";
+        let div6 = document.getElementById("translationList");
+        div6.style.display = "none";
+        let nextList = document.getElementById("nextList");
+        nextList.style.display = "none";
+        let elementById = document.getElementById(obj + "List");
+        if (elementById.style.display == "none") {
+            elementById.style.display = "block";
+        }
+
+
+    }
+
+
+    function queryCommpanyType() {
+        $("#jcommpany_type").empty();
+        $.ajax({
+            "url": "/job/commpany_type",
+            "data": null,
+            "type": "get",
+            "dataType": "json",
+            "success": function (json) {
+                let data = json.data;
+                let optionCom = ' <option value="不限"  name="jcommpanyType">不限</option>';
+                $("#jcommpany_type").append(optionCom)
+                for (let i = 0; i < data.length; i++) {
+                    optionCom = ' <option value="#{typeVal}" name="jcommpanyType">#{type}</option>';
+                    optionCom = optionCom.replace("#{typeVal}", data[i]["jcommpanyType"]);
+                    optionCom = optionCom.replace("#{type}", data[i]["jcommpanyType"]);
+                    $("#jcommpany_type").append(optionCom);
+
+                }
+
+            }
+        });
+    }
+
+    function searchJob(jid) {
+        window.location.href = "jobDetail.html?jid=" + jid;
+    }
+
+    function showList() {
+        $("#hot-list").empty();
+
+        $.ajax({
+            "url": "/job/hot_job_list",
+            "data": null,
+            "type": "get",
+            "dataType": "json",
+            "success": function (json) {
+                let data = json.data;
+                for (let i = 0; i < data.length; i++) {
+
+                    let div = '<div class="col-md-12 jobItemDiv" style="margin-bottom: 20px">\n' +
+                        '                        <div >\n' +
+                        '                            <table id="#{jid}" class="col-md-12 text-row-7" onclick="searchJob(this.id);">\n' +
+                        '                                <tr >\n' +
+                        '                                    <td style="text-align: left;" >\n' +
+                        '                                    <a style="text-decoration: none;"href="javascript:void(0)">#{jobName}</a>\n' +
+                        '                                    </td>\n' +
+                        '                                    <td style="text-align: left;padding-left: 20px" >\n' +
+                        '                                    <a style="text-decoration: none;padding-left: 60px;" href="javascript:void(0)">工作地点：#{jobArea}</a>\n' +
+                        '                                    </td >\n' +
+                        '                                    <td style="text-align: left;padding-left: 20px" >\n' +
+                        '                                        <a style="text-decoration: none;padding-left: 120px" href="javascript:void(0)">#{jcommpanyName}</a>\n' +
+                        '                                    </td>\n' +
+                        '                               </tr>\n' +
+                        '                                <tr >\n' +
+                        '                                    <td style="text-align: left;" >\n' +
+                        '                                        <a style="text-decoration: none;"href="javascript:void(0)">#{education}</a>\n' +
+                        '                                        <a style="text-decoration: none;"href="javascript:void(0)">#{salary}</a>\n' +
+                        '                                    </td>\n' +
+                        '                                    <td style="text-align: left;padding-left: 20px" >\n' +
+                        '                                        <a style="text-decoration: none;padding-left: 60px;" href="javascript:void(0)">工作经验：#{experience}</a>\n' +
+                        '                                    </td >\n' +
+                        '                                    <td style="text-align: left;padding-left: 20px" >\n' +
+                        '                                        <a style="text-decoration: none;padding-left: 120px" href="javascript:void(0)">#{jcommpanyType}</a>\n' +
+                        '                                        <a style="text-decoration: none;" href="javascript:void(0)">#{jcommpanyScale}</a>\n' +
+                        '                                    </td>\n' +
+                        '                                </tr>\n' +
+                        '                            </table>\n' +
+                        '                        </div>\n' +
+                        '                    </div>';
+                    div = div.replace("#{jid}", data[i].jid);
+                    div = div.replace("#{jobName}", data[i].name);
+                    div = div.replace("#{jobArea}", data[i].jarea);
+                    div = div.replace("#{jcommpanyName}", data[i].jcommpanyName);
+                    div = div.replace("#{education}", data[i].education);
+                    div = div.replace("#{experience}", data[i].experience);
+                    div = div.replace("#{jcommpanyType}", data[i].jcommpanyType);
+                    div = div.replace("#{jcommpanyScale}", data[i].jcommpanyScale);
+                    div = div.replace("#{salary}", data[i].salary);
+                    $("#hot-list").append(div);
+                }
+            }
+        });
+    };
+    function logout(){
+        $.ajax({
+            "url":"/users/logout",
+            "type":"post",
+            "dataType":"json",
+            "success":function (json) {
+                window.open("login.html");
+            }
+        });
+    };
+
+</script>
+
+</body>
+
+</html>

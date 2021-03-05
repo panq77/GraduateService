@@ -1,13 +1,18 @@
-package pq.empm.util;
+package pq.empm.vo;
 
-public class SearchCondition {
-    private String text;
-    private String type;
-    private String salary;
-    private String education;
-    private String jcommpanyType;
-    private String jcommpanyScale;
-    private String jarea;
+import org.springframework.stereotype.Repository;
+
+import java.io.Serializable;
+
+
+public class SearchCondition  {
+    private String text="空";
+    private String type="空";
+    private String salary="不限";
+    private String education="不限";
+    private String jcommpanyType="不限";
+    private String jcommpanyScale="不限";
+    private String jarea="全国";
     private Integer page=1;
     private Integer rows=5;
 

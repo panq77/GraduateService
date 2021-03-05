@@ -36,4 +36,11 @@ public class HotServiceImpl implements HotService {
 
         return hots;
     }
+
+    @Override
+    public int queryClickTimesByType(String text) {
+
+          int clickNum=hotMapper.selectClickTimesByType(text);
+          return clickNum;
+    }
 }

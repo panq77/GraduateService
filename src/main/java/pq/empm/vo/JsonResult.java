@@ -2,7 +2,7 @@ package pq.empm.vo;
 
 public class JsonResult<T> {
     private String message;
-    private Integer code=200;
+    private Integer code=20;
     private T data;
 
     public JsonResult() {
