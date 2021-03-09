@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!--edge浏览器H5兼容设置-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--360浏览器H5兼容设置-->
+    <meta name="renderer" content="webkit"/>
+    <title>学子商城</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--导入核心文件-->
+    <script src="../bootstrap3/js/holder.js"></script>
+    <link href="../bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <script src="../bootstrap3/jquery-1.9.1.min.js"></script>
+    <script src="../bootstrap3/js/bootstrap.js"></script>
+    <!-- 字体图标 -->
+    <link rel="stylesheet" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/layout.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/top.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/footer.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/cart.css"/>
+    <script src="../js/cart.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+
+        table tbody {
+            display: block;
+            max-height: 300px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 1px;
+        }
+
+        table thead, tbody tr, tfoot tr, thead tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+    </style>
+</head>
+
+<body>
+<!--头部-->
+<div id="all" class="black_overlay">
+    <header class="header">
+        <div class="row">
+            <!--快捷选项-->
+            <div class="col-md-9 top-item">
+                <ul class="list-inline pull-right">
+
+                    <li><a href="PublisherUpdate.html"><span class="fa fa-file-text"></span>&nbsp;个人信息</a></li>
+                    <li class="li-split">|</li>
+                    <li><a href="javascript:void (0)"><span class="fa fa-user"></span>&nbsp;</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" style="z-index: 1000;">
+
+
+        <div id="resume_list" class="col-md-offset-1 col-md-10" style="position: absolute;z-index: 100002;width: 700px;display: none">
+            <div class="panel panel-primary" style="position: relative">
+                <div class="panel-heading">
+                    <p class="panel-title"><span class="fa fa-bicycle"></span>招聘信息</p>
+                </div>
+
+                <div class="panel-body jobItemDiv ">
+
+                    <table class="cart-table" width="100%">
+                        <tbody id="resume_show"  class="cart-body">
+
+<!--                        <div class="total-bar">-->
+<!--                            <a id="name" href="javascript:void(0)" style="text-decoration: none">Java开发工程师 = ></a>-->
+<!--                            <a id="resume_name" href="javascript:void(0)" style="text-decoration: none;">dasjkdhasjdja。doc</a>-->
+<!--                            <div class="pull-right" >-->
+<!--                                    <input id="download" class="btn btn-primary" type="button" value="下载" />&nbsp-->
+<!--                                <input id="pass" class="btn btn-primary" type="button" value="通过" />&nbsp-->
+<!--                                <input id="back" class="btn btn-primary" type="button" value="驳回" />&nbsp-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+                        </tbody>
+
+
+
+                    </table>
+                    <div class="pull-right">  <input type="button" onclick="closeResumeShow()" value="关闭" /></div>
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <div class="col-md-offset-1 col-md-10">
+            <div class="panel panel-primary" style="position: relative">
+                <div class="panel-heading">
+                    <p class="panel-title"><span class="fa fa-bicycle"></span>已发布</p>
+                </div>
+
+                <div class="panel-body jobItemDiv ">
+
+                    <table class="cart-table" width="100%">
+                        <thead>
+                        <tr>
+                            <th width="25%">名称</th>
+                            <th width="15%">地点</th>
+                            <th width="15%">工作经验</th>
+                            <th width="15%">学历</th>
+                            <th width="25%">操作</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="publish_jobs" class="cart-body">
+
+
+                        </tbody>
+                    </table>
+                    <div class="total-bar">
+                        <a href="javascript:void(0)" style="text-decoration: none">###取消发布需先处理求职信息</a>
+                    </div>
+                    <div>
+                    <span class="pull-right">
+                        <input id="add_job" type="button" value="发布新职位" class="btn btn-primary btn-lg "/>
+                    </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#publish_jobs").empty();
+        $.ajax({
+            "url": "/job/publisher_job_list",
+            "data": null,
+            "type": "post",
+            "dataType": "json",
+            "success": function (json) {
+
+                if (json.code == 20) {
+                    $("#publish_jobs").empty();
+                    let data = json.data;
+                    for (let i = 0; i < data.length; i++) {
+                        let tr;
+
+                        if (data[i].stat == "1") {
+                            tr = '<tr id="#{tr_jid}" onclick="showResumeInfo(this.id)">\n' +
+                                '                        <td> <i style="width:8px;height:8px;border-radius:50%;background-color:red;display: inline-block;float: left;margin-top: 6px"></i>#{jname}</td>\n' +
+                                '                        <td><span id="jarea">#{jarea}</span></td>\n' +
+                                '                        <td><span id="experience">#{experience}</span></td>\n' +
+                                '                        <td><span id="education">#{education}</span></td>\n' +
+                                '                        <td>\n' +
+                                '                            <input id="#{jid}" type="button" onclick="delJobItem(this)"\n' +
+                                '                                   class="cart-del btn btn-primary " value="下架"/>\n' +
+                                '                        </td>\n' +
+                                '                    </tr>';
+                        } else {
+                            tr = ' <tr  >\n' +
+                                '                            <td>#{jname}</td>\n' +
+                                '                            <td><span id="jarea">#{jarea}</span></td>\n' +
+                                '                            <td><span id="experience">#{experience}</span></td>\n' +
+                                '                            <td><span id="education">#{education}</span> </td>\n' +
+                                '                            <td>\n' +
+                                '                                <input id="#{jid}" type="button" onclick="delJobItem(this)" class="cart-del btn btn-primary " value="下架" />\n' +
+                                '                            </td>\n' +
+                                '\n' +
+                                '                        </tr>';
+                        }
+
+                        tr = tr.replace("#{jname}", data[i].name);
+                        tr = tr.replace("#{jarea}", data[i].jarea);
+                        tr = tr.replace("#{experience}", data[i].experience);
+                        tr = tr.replace("#{education}", data[i].education);
+                        tr = tr.replace("#{jid}", data[i].jid);
+                        tr = tr.replace("#{tr_jid}", data[i].jid);
+
+                        $("#publish_jobs").append(tr);
+                    }
+
+                } else {
+                    alert("信息加载失败，出现异常");
+                }
+            }
+
+        });
+    })
+   function closeResumeShow() {
+       document.getElementById('resume_list').style.display = 'none'
+   }
+    function showResumeInfo(jid) {
+        document.getElementById('resume_list').style.display = 'block'
+        $("#resume_show").empty();
+
+        $.ajax({
+            url:'/resume/resume_list',
+            data:'jid='+jid,
+            type:'post',
+            dataType:'json',
+            "success":function (json) {
+
+               if (json.code==20){
+                   let data = json.data;
+                   for (let i = 0; i < data.length; i++) {
+                       let div=' <div id="#{rid}" class="total-bar">\n' +
+                           '                            <a id="name" href="javascript:void(0)" style="text-decoration: none"> #{jname} = > </a>\n' +
+                           '                            <a id="resume_name" href="javascript:void(0)" style="text-decoration: none;"> #{name} </a>\n' +
+                           '                            <div class="pull-right" >\n' +
+                           '                                    <input id="#{rid}" class="btn btn-primary" type="button" onclick="downloadResume(this.id)" value="下载" />&nbsp\n' +
+                           '                                <input id="#{rid}" class="btn btn-primary" type="button" onclick="passResume(this.id)" value="通过" />&nbsp\n' +
+                           '                                <input id="#{rid}" class="btn btn-primary" type="button" onclick="backResume(this.id)" value="驳回" />&nbsp\n' +
+                           '                            </div>\n' +
+                           '                        </div>';
+                          div=div.replace("#{jname}",data[i].jname);
+
+                       div=div.replace("#{name}",data[i].name);
+                       div=div.replace(/#{rid}/g,data[i].rid);
+                       $("#resume_show").append(div);
+                   }
+               }
+
+            }
+        });
+    }
+    $("#add_job").click(function () {
+            window.location.href="addJob.html";
+    });
+    function downloadResume(rid) {
+        let a = document.createElement('a');
+        a.href = '/resume/download?rid='+rid;
+        a.click();
+    };
+    function backResume(rid) {
+        $("#"+rid).remove();
+        $.ajax({
+            url:'/resume/back',
+            type:'post',
+            data:'rid='+rid,
+            dataType:'json',
+            "success":function (json) {
+                if (json.code==20){
+
+                }else {
+                    alert("操作失败")
+                }
+            }
+        });
+
+    }
+
+    function passResume(rid) {
+        $("#"+rid).remove();
+        $.ajax({
+            url:'/resume/success',
+            type:'post',
+            data:'rid='+rid,
+            dataType:'json',
+            "success":function (json) {
+                if (json.code==20){
+
+                }else {
+                    alert("操作失败")
+                }
+            }
+        });
+    }
+
+    function delJobItem(btn) {
+        $(btn).parents("tr").remove();
+        $.ajax({
+            url: '/job/delete',
+            type: 'post',
+            data: 'jid=' + btn.id,
+            dataType: 'json',
+            "success": function (json) {
+                if (json.code == 20) {
+
+                } else {
+                    alert(json.message)
+                }
+
+            }
+        });
+    }
+
+</script>
+</body>
+
+</html>

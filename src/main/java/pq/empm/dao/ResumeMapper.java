@@ -17,4 +17,8 @@ public interface ResumeMapper {
     int updateStat(int rid);
 
     List<Resume> getListById(Integer pid);
+
+    Resume checkedByJidAndUid(String jid, Integer uid);
+
+    List<Resume> queryResumeByPidAndJid(Integer pid, String jid);
 }

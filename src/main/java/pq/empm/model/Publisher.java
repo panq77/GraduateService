@@ -7,7 +7,7 @@ public class Publisher {
 
     private String pwd;
 
-    private String nickname;
+    private String nickName;
 
     private String phone;
 
@@ -21,16 +21,21 @@ public class Publisher {
     public Publisher(String name, String pwd) {
     }
 
+    @Override
+    public String toString() {
+        return "Publisher{" +
+                "pid=" + pid +
+                ", name='" + name + '\'' +
+                ", pwd='" + pwd + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", commpany='" + commpany + '\'' +
+                '}';
+    }
+
     public Integer getPid() {
         return pid;
-    }
-
-    public String getPwd() {
-        return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
     }
 
     public void setPid(Integer pid) {
@@ -42,15 +47,23 @@ public class Publisher {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname == null ? null : nickname.trim();
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getPhone() {
@@ -58,7 +71,7 @@ public class Publisher {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = phone;
     }
 
     public String getEmail() {
@@ -66,7 +79,7 @@ public class Publisher {
     }
 
     public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+        this.email = email;
     }
 
     public String getCommpany() {
@@ -74,19 +87,6 @@ public class Publisher {
     }
 
     public void setCommpany(String commpany) {
-        this.commpany = commpany == null ? null : commpany.trim();
-    }
-
-    @Override
-    public String toString() {
-        return "Publisher{" +
-                "pid=" + pid +
-                ", name='" + name + '\'' +
-                ", pwd='" + pwd + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", commpany='" + commpany + '\'' +
-                '}';
+        this.commpany = commpany;
     }
 }

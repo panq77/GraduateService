@@ -1,6 +1,9 @@
 package pq.empm.vo;
 
+import io.searchbox.annotations.JestId;
+
 public class EsJob {
+    @JestId
     private String jid;
     private String jname;
     private String TypeC;

@@ -194,6 +194,19 @@
 
 <script type="text/javascript">
     $(function () {
+        $.ajax({
+            "url": "/users/check_login",
+            "type": "post",
+            "dataType": "json",
+            "success": function (json) {
+                if (json.code == 20) {
+                    $("#logInfo").attr("style", "display : none;")
+                    $("#username").text(json.data.uname);
+                }else {
+                    window.location.href="login.html";
+                }
+            }
+        });
         queryCommpanyType();
         let text = localStorage.getItem("text");
 
@@ -343,17 +356,7 @@
 
 
 
-        $.ajax({
-            "url": "/users/check_login",
-            "type": "post",
-            "dataType": "json",
-            "success": function (json) {
-                if (json.code == 20) {
-                    $("#logInfo").attr("style", "display : none;")
-                    $("#username").text(json.data.uname);
-                }
-            }
-        });
+
          showVisit();
 
     });
@@ -389,7 +392,7 @@
                         $("#has_browse").append(div);
                     }
                 } else {
-
+                    $("#has_browse").append("<p>没有浏览记录</p>");
                 }
 
 
@@ -400,7 +403,7 @@
         $("#search-list").empty();
         let page = localStorage.getItem("page");
         let lastPage = parseInt(page) - 1;
-        alert(lastPage);
+
 
         $.ajax({
             url: "/search/query",
@@ -464,7 +467,7 @@
         $("#search-list").empty();
         let page = localStorage.getItem("page");
         let nextPage = parseInt(page) + 1;
-        alert(nextPage);
+
 
         $.ajax({
             url: "/search/query",

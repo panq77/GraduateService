@@ -40,15 +40,10 @@ public class UserController extends BaseController{
     }
     @RequestMapping("update_user_info")
     public JsonResult<Void> updateInfo(HttpSession session,User u){
-        User user = (User) session.getAttribute("username");
 
-        User user1 = userService.updateUserInfo(u);
-        user1.setPwd(null);
-
-
-        if (user!=null){
-            session.setAttribute("username",user1);
-        }
+        User user = userService.updateUserInfo(u);
+        user.setPwd(null);
+            session.setAttribute("username",user);
         return new JsonResult<Void>();
     }
     @RequestMapping("query_info")
@@ -57,12 +52,7 @@ public class UserController extends BaseController{
 
          return new JsonResult<>(u);
     }
-    @RequestMapping("test")
-    public JsonResult<Void> test(HttpSession session){
-        User u = (User) session.getAttribute("username");
 
-        return new JsonResult<>();
-    }
     @RequestMapping("check_login")
     public JsonResult<User> checkLogin(HttpSession session){
         User username = (User) session.getAttribute("username");

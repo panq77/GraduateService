@@ -1,0 +1,166 @@
+<html>
+	<head>
+		<title>表单页面</title>
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<link rel="stylesheet" type="text/css" href="../css/addJob.css" />
+		<link rel="stylesheet" type="text/css" href="../css/index.css"/>
+
+		<script src="../bootstrap3/js/holder.js"></script>
+		<link href="../bootstrap3/css/bootstrap.css" rel="stylesheet" type="text/css">
+		<script src="../bootstrap3/jquery-1.9.1.min.js"></script>
+		<script src="../bootstrap3/js/bootstrap.js"></script>
+		<!-- 字体图标 -->
+		<link rel="stylesheet" href="../bootstrap3/font-awesome-4.7.0/css/font-awesome.css" />
+		<link rel="stylesheet" type="text/css" href="../css/top.css" />
+		<link rel="stylesheet" type="text/css" href="../css/index.css" />
+		<link rel="stylesheet" type="text/css" href="../css/layout.css" />
+
+		<link rel="stylesheet" type="text/css" href="../css/footer.css" />
+
+	</head>
+	<body style="background-image:url(../images/index/bg1.jpg); ">
+	<div class="container  text-left">
+	<div class="addJob" style="margin-top: 50px;margin-left: 100px">
+		<p>填写岗位信息</p>
+	<form  id="form-add" class="form-horizontal" role="form">
+		<!--用户名-->
+		<div class="form-group">
+			<label  class="col-md-2 control-label">职位名称：</label>
+			<div class="col-md-2">
+				<input id="name"  name="name"   type="text" class="form-control"  >
+			</div>
+			<label class="col-md-2 control-label">职位类型A:</label>
+			<div class="col-md-2">
+				<input  name="typeA" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">职位类型B:</label>
+			<div class="col-md-2">
+				<input  name="typeB" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">职位类型C:</label>
+			<div class="col-md-2">
+				<input  name="typeC" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">薪资:</label>
+			<div class="col-md-2">
+				<input  name="salary" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">工作经验:</label>
+			<div class="col-md-2">
+				<input  name="experience" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">学历:</label>
+			<div class="col-md-2">
+				<input  name="education" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">企业名称:</label>
+			<div class="col-md-2">
+				<input  name="jcommpanyName" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">企业类型:</label>
+			<div class="col-md-2">
+				<input  name="jcommpanyType" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">企业规模:</label>
+			<div class="col-md-2">
+				<input  name="jcommpanyScale" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">工作位置:</label>
+			<div class="col-md-2">
+				<input  name="jarea" type="text" class="form-control" >
+			</div>
+			<label class="col-md-2 control-label">面试官:</label>
+			<div class="col-md-2">
+				<input  name="interviewer" type="text" class="form-control" >
+			</div>
+
+
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">工作职责:</label>
+			<div class="col-md-2">
+				<textarea name="jobDuty" style="width: 600px;height: 150px" ></textarea>
+			</div>
+
+
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">工作要求:</label>
+			<div class="col-md-2">
+				<textarea name="jobRequest" style="width: 600px;height: 150px" ></textarea>
+			</div>
+
+		</div>
+		<div class="form-group">
+			<label class="col-md-2 control-label">企业简介:</label>
+			<div class="col-md-2">
+				<textarea name="jcommpanyIntro" style="width: 600px;height: 150px" ></textarea>
+			</div>
+
+		</div>
+		<div class="form-group">
+
+			<div class="col-md-4" style="float: right">
+				<input  id="btn-add"  class="btn btn-primary" type="button" value="发布" />
+				<input  id="goback"  class="btn btn-primary" type="button" value="返回" />
+			</div>
+		</div>
+
+	</form>
+	</div>
+	</div>
+	<script type="text/javascript">
+		$(function () {
+
+
+				// $.ajax({
+				// 	"url":"/users/check_login",
+				// 	"type":"post",
+				// 	"dataType":"json",
+				// 	"success":function (json) {
+				// 		if (json.code==20){
+				// 			let data = json.data;
+				// 			$("#uname").val(data.uname);
+				// 			$("#age").val(data.age);
+				// 			let genderId=json.data.gender==0?"nan":"nv"; // 0/1
+				// 			$("#"+genderId).attr("checked","checked");
+				// 			$("#phone").val(data.phone);
+				// 			$("#email").val(data.email);
+				// 			$("#expectedEara").val(data.expectedEara);
+				// 			$("#expectedJob").val(data.expectedJob);
+				// 			$("#education").val(data.education);
+				// 			let exId=json.data.hasExperience==0?"noEx":"hasEx";
+				// 			$("#"+exId).attr("checked","checked");
+				// 		}else {
+				// 			alert("请重新登录");
+				// 			window.location.href='login.html';
+				// 		}
+				// 	}
+				// });
+		});
+		$("#btn-add").click(function(){
+
+			$.ajax({
+				"url":"/job/add",
+				"data":$("#form-add").serialize(),
+				"type":"get",
+				"dataType":"json",
+				"success":function(json){
+					if(json.code==20){
+                             alert("发布成功")
+
+					}else{
+						alert(json.message);
+					}
+				}
+			})
+		});
+     $("#goback").click(function () {
+            window.history.back();
+	 });
+
+	</script>
+
+
+	</body>
+</html>

@@ -5,7 +5,7 @@
     <result column="pid" jdbcType="INTEGER" property="pid" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
-    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickName" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="commpany" jdbcType="VARCHAR" property="commpany" />
@@ -17,21 +17,18 @@
     insert into publisher (pid, name, pwd,nickname,
       phone, email, commpany
       )
-    values (#{pid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{nickname,jdbcType=VARCHAR},
+    values (#{pid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{nickName,jdbcType=VARCHAR},
       #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{commpany,jdbcType=VARCHAR}
       )
   </insert>
   <update id="update" parameterType="pq.empm.model.Publisher">
     update publisher
-    <trim prefix="set" suffix="where pid = #{pid}" prefixOverrides=",">
-      <if test="name != null">
-        name=#{name},
+    <trim prefix="set" suffix="where name = #{name}" suffixOverrides=",">
+      <if test="nickName != null">
+        nickname=#{nickName},
       </if>
       <if test="pwd != null">
         pwd=#{pwd},
-      </if>
-      <if test="nickname != null">
-        nickname=#{nickname},
       </if>
       <if test="phone != null">
         phone=#{phone},
@@ -42,7 +39,6 @@
       <if test="commpany != null">
         commpany=#{commpany},
       </if>
-        pid=#{pid}
     </trim>
   </update>
 </mapper>

@@ -8,4 +8,6 @@ public interface PublisherService {
     Publisher login(String name, String pwd);
 
     Publisher updateInfo(Publisher publisher);
+
+    Publisher queryInfo(String name);
 }

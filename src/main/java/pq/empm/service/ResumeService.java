@@ -15,5 +15,7 @@ public interface ResumeService {
 
     void success(int rid);
 
-    List<ReceiveItem> getBox(Integer pid);
+    List<ReceiveItem> getBox(String jid,Integer pid);
+
+    void checked(Integer uid, String jid);
 }

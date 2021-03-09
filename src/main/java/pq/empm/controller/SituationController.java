@@ -10,6 +10,7 @@ import pq.empm.util.MapperUtil;
 import pq.empm.vo.JsonResult;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,19 +22,17 @@ public class SituationController {
     @Autowired
     private HotService hotService;
     @RequestMapping("/query_situation")
-    public JsonResult<List<String>> query(String text){
+    public JsonResult<List<Map>> query(String text){
+        System.out.println(111);
         List<Map> maps=situationService.query(text);
-        List<String> lists=new ArrayList<>();
+
         int clickTimes=hotService.queryClickTimesByType(text);
-        for (Map map:maps){
-            try {
-                String jsonMap = MapperUtil.MP.writeValueAsString(map.put("clickTimes",clickTimes));
-                lists.add(jsonMap);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-        return  new JsonResult<>(lists);
+
+        HashMap<String, String> hashMap = new HashMap<>();
+           hashMap.put("clickTimes", String.valueOf(clickTimes));
+        maps.add(hashMap);
+        System.out.println(maps);
+        return  new JsonResult<>(maps);
     }
 
 }

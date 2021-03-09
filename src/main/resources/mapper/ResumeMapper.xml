@@ -12,11 +12,22 @@
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="stat" jdbcType="VARCHAR" property="stat" />
   </resultMap>
+  <select id="queryResumeByPidAndJid" resultMap="BaseResultMap">
+    select rid, newName, name,
+           uid, pid, jid, jname,
+           url, stat from resume where pid=#{pid} and jid=#{jid} and stat =1
+  </select>
+  <select id="checkedByJidAndUid" resultMap="BaseResultMap">
+    select rid, newName, name,
+           uid, pid, jid, jname,
+           url, stat from resume
+       where jid=#{jid} and uid=#{uid} and stat =1
+  </select>
   <select id="getListById" resultMap="BaseResultMap" >
     select rid,name,jname from resume where pid=#{pid}
   </select>
   <update id="updateStat" parameterType="pq.empm.model.Resume" >
-    update resume set stat=1 where rid=#{rid}
+    update resume set stat=2 where rid=#{rid}
   </update>
   <delete id="deleteById" parameterType="pq.empm.model.Resume">
        delete from resume where rid=#{rid}

@@ -55,16 +55,17 @@ public class UserServiceImpl implements UserService {
     public User updateUserInfo(User u) {
         User user = userMapper.queryByName(u.getUname());
         if (user != null) {
-              if (MD5Util.md5(u.getPwd()).equals(user.getPwd())){
-                  throw new UserExist("该用户名已存在");
+              if (!MD5Util.md5(u.getPwd()).equals(user.getPwd())){
+                  throw new PwdNotMatch("密码不正确");
               }
         }
-        u.setPwd(MD5Util.md5(u.getPwd()));
+        u.setPwd(user.getPwd());
         int count = userMapper.update(u);
         if (count == 0) {
             throw new updateError("操作失败，请重试");
         }
-        User user1 = queryInfo(u.getUname());
+
+        User user1 = userMapper.queryByName(user.getUname());
         return user1;
     }
 

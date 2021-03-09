@@ -2,6 +2,7 @@ package pq.empm.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.avro.data.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,10 +11,12 @@ import pq.empm.model.Job;
 import pq.empm.model.Publisher;
 import pq.empm.model.User;
 import pq.empm.service.JobService;
+import pq.empm.util.CheckNull;
 import pq.empm.util.CookieUtils;
 import pq.empm.util.MapperUtil;
 import pq.empm.vo.JsonResult;
 import pq.empm.vo.LogData;
+import pq.empm.vo.PublisherJob;
 import pq.empm.vo.VisitJob;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,11 +54,11 @@ public class JobController extends BaseController {
         if (visitListJson != null) {
             String visitListJsonDecode = URLDecoder.decode(visitListJson, "utf-8");
             visitList =  MapperUtil.MP.readValue(visitListJsonDecode, LinkedList.class);
-            System.out.println(visitList);
+
 
             if (visitList.size()==6) {
                     visitList.pop();
-                System.out.println(visitList+"满了");
+
             }
         } else {
             visitList = new LinkedList<>();
@@ -67,14 +70,17 @@ public class JobController extends BaseController {
 
 
         log.info(MapperUtil.MP.writeValueAsString(new LogData(
-                u.getUid(), u.getUname(), u.getAge(), u.getGender(), u.getExpectedJob(), u.getExpectedEara(),
-                u.getEducation(), u.getHasExperience().toString(), "click_job",
+                u.getUid(), u.getUname(), (Integer) CheckNull.check(u.getAge()), (Integer) CheckNull.check(u.getGender()), CheckNull.check(u.getExpectedJob()).toString(),
+                CheckNull.check(u.getExpectedEara()).toString(),CheckNull.check(u.getEducation()).toString(),
+                ((Integer)CheckNull.check(u.getHasExperience())).toString(), "click_job",
                 job.getJid(), job.getName(), job.getTypeC(), job.getSalary(), job.getJcommpanyName(),
                 job.getJcommpanyType(), job.getJcommpanyScale(), job.getJarea(), job.getPid()
         )));
-        System.out.println(visitList);
+
         return new JsonResult<>(job);
     }
+
+
 
     //publisher查看自己发布的岗位
     @RequestMapping("/queryList")
@@ -94,7 +100,8 @@ public class JobController extends BaseController {
 
     //publisher发布岗位信息
     @RequestMapping("/add")
-    public JsonResult<Void> addJob(HttpSession session, Job job) {
+    public JsonResult<Void> addJob(HttpSession session, Job job) throws JsonProcessingException {
+        System.out.println(job);
         Publisher publisher = (Publisher) session.getAttribute("p_username");
         job.setPid(publisher.getPid());
         jobService.addJob(job);
@@ -102,7 +109,10 @@ public class JobController extends BaseController {
     }
 
     @RequestMapping("delete")
-    public JsonResult<Void> removeJob() {
+    public JsonResult<Void> removeJob(HttpSession session,String jid) {
+        Publisher publisher = (Publisher) session.getAttribute("p_username");
+
+        jobService.removeJob(publisher.getPid(),jid);
         return new JsonResult<>();
     }
 
@@ -135,8 +145,27 @@ public class JobController extends BaseController {
         }
         String visitListJsonDecode = URLDecoder.decode(visitListJson, "utf-8");
         LinkedList<VisitJob> visitList = MapperUtil.MP.readValue(visitListJsonDecode, LinkedList.class);
-        System.out.println(visitList);
 
        return  new JsonResult<>(visitList);
+    }
+    @RequestMapping("publisher_job_list")
+    public JsonResult<List<PublisherJob>> getPublisherJobsById(HttpSession session){
+
+        Publisher publisher = (Publisher) session.getAttribute("p_username");
+        List<PublisherJob> jobs=jobService.queryPublisherJobsById(publisher.getPid());
+        return new JsonResult<>(jobs);
+    }
+    @RequestMapping("recommend")
+    public JsonResult<List<Map>> RecommendJob(HttpSession session){
+        User u = (User) session.getAttribute("username");
+        List<Map> maps=jobService.recommendJob(u);
+        System.out.println("recommend"+maps);
+        return  new JsonResult<>(maps);
+    }
+
+    @RequestMapping("type_c")
+    public JsonResult<List<Map>> queryAllTypeC(){
+        List<Map> maps = jobService.queryTypeC();
+        return new JsonResult<>(maps);
     }
 }

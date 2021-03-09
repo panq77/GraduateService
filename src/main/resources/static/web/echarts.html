@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../bootstrap3/jquery-1.8.3.min.js"></script>
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+</head>
+<body>
+<div style="width: 100%;height: 150px;margin-top: 40px;background-color: #667799;top: 60px">
+    <div style="float:left;margin-left: 350px;font-size: 40px;margin-top: 40px">热门：
+        <select id="opt_hot"  style="font-size: 30px" onchange="show(this.value)">
+            <option id="hot_default" value="" selected>请选择</option>
+            <option value="热门企业">热门企业</option>
+            <option value="热门行业">热门行业</option>
+            <option value="热门岗位类型">热门岗位类型</option>
+            <option value="热门城市">热门城市</option>
+        </select>
+        岗位类型详细：<select id="opt_type" style="font-size: 30px" onchange="show_detail(this.value)">
+
+
+        </select>
+    </div>
+</div>
+<div id="main" style="width: 600px;height:400px;margin-left: 400px"></div>
+<script type="text/javascript">
+    $(function () {
+
+
+        $.ajax({
+            url: '/job/type_c',
+            data: null,
+            type: 'post',
+            dataType: 'json',
+            "success": function (json) {
+                let data = json.data;
+                let opt= '<option id="type_default" value="" selected>请选择</option>';
+                $("#opt_type").append(opt)
+                for (let i = 0; i < data.length; i++) {
+                 opt =' <option value="#{typeC}">#{typeC}</option>';
+                    opt=opt.replace(/#{typeC}/g,data[i]["typeC"])
+
+                    $("#opt_type").append(opt)
+                }
+            }
+        });
+    });
+
+    function show_detail(value) {
+      document.getElementById("hot_default").selected=true;
+        $.ajax({
+            url: '/situation/query_situation',
+            type: "post",
+            data: "text=" + value,
+            dataType: "json",
+            "success": function (json) {
+                if (json.code == 20) {
+                    let data = json.data;
+                    let allJoin = 0;
+                    let text = null;
+                    let benKeMail = 0;
+                    let dazMail = 0;
+                    text = data[0]["typeC"]
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i]["education"] == "大专") {
+                            dazMail = data[i]["mailing"]
+                        } else if (data[i]["education"] == "本科") {
+                            benKeMail = data[i]["mailing"]
+                        }
+                        if (data[i]["clickTimes"] != null) {
+                            allJoin = data[i]["clickTimes"]
+                        }
+
+                    }
+                    let myChart = echarts.init(document.getElementById('main'));
+                    // 指定图表的配置项和数据
+                    let option = {
+                        title: {
+                            text: text,
+
+                        },
+
+                        tooltip: {},
+                        legend: {
+                            data: ["参与"],
+                            icon:"circle"
+
+                        },
+                        xAxis: {
+                        },series: [{
+                            name: '已投递',
+                            type: 'bar',
+                            data: [benKeMail, dazMail,allJoin],
+                            axisLabel:{
+                                textStyle:{
+                                    fontSize:25
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: function (params) {
+                                        // build a color map as your need.
+                                        let colorList = [
+                                            '#C1232B', '#B5C334', '#FCCE10', '#E87C25', '#27727B',
+                                            '#FE8463', '#9BCA63', '#FAD860', '#F3A43B', '#60C0DD',
+                                            '#D7504B', '#C6E579', '#F4E001', '#F0805A', '#26C0C0'
+                                        ];
+                                        return colorList[params.dataIndex]
+                                    }
+
+                                }
+                            }
+                        }],
+
+                        yAxis: {
+                            data: ['本科', '大专', '参与'],
+                            axisLabel:{
+                                textStyle:{
+                                    fontSize:20,
+                                    fontcolor:'#00d7fc',
+                                }
+                            }
+                        },
+
+                    };
+
+                    // 使用刚指定的配置项和数据显示图表。
+                    myChart.setOption(option,true);
+                }
+
+            }
+        });
+
+    }
+
+    function show(value) {
+        document.getElementById("type_default").selected=true;
+        $.ajax({
+            url: '/hot/query_hot',
+            type: "post",
+            data: "text=" + value,
+            dataType: "json",
+            "success": function (json) {
+                if (json.code == 20) {
+                    let data = json.data;
+                    let sum = [];
+                    let target = [];
+                    if (value == "热门企业") {
+                        for (let i = 0; i < data.length; i++) {
+                            sum.push(data[i]["sum"])
+                            target.push(data[i]["jcommpanyName"])
+                        }
+                        let myChart = echarts.init(document.getElementById('main'));
+                        // 指定图表的配置项和数据
+                        let option = {
+                            title: {
+                                text: "热门企业",
+                                textStyle:{
+                                    fontsize:32,
+                                }
+                            },
+                            tooltip: {},
+                            legend: {
+                                data: ['热度']
+                            },
+                            xAxis: {
+                                data: target,
+                                "axisLabel": {
+                                    interval: 0
+                                }
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '热度',
+                                type: 'bar',
+                                label: {
+                                    normal: {
+                                        show: true,
+                                        position: 'top',
+                                        formatter: function (v) {
+                                            let val = v.data;
+                                            return val
+                                        },
+                                    }
+                                },
+                                data: sum
+                            }]
+                        };
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option,true);
+                    } else if (value == "热门行业") {
+                        for (let i = 0; i < data.length; i++) {
+                            sum.push(data[i]["sum"])
+                            target.push(data[i]["jcommpanyType"])
+                        }
+                        let myChart = echarts.init(document.getElementById('main'));
+                        // 指定图表的配置项和数据
+                        let option = {
+                            title: {
+                                text: "热门行业"
+                            },
+                            tooltip: {},
+                            legend: {
+                                data: ['热度']
+                            },
+                            xAxis: {
+                                data: target,
+                                "axisLabel": {
+                                    interval: 0
+                                }
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '热度',
+                                type: 'bar',
+                                label: {
+                                    normal: {
+                                        show: true,
+                                        position: 'top',
+                                        formatter: function (v) {
+                                            let val = v.data;
+                                            return val
+                                        },
+                                    }
+                                },
+                                data: sum
+                            }]
+                        };
+
+                        myChart.setOption(option,true);
+                    } else if (value == "热门岗位类型") {
+                        for (let i = 0; i < data.length; i++) {
+                            sum.push(data[i]["sum"])
+                            target.push(data[i]["typeC"])
+                        }
+                        let myChart = echarts.init(document.getElementById('main'));
+                        // 指定图表的配置项和数据
+                        let option = {
+                            title: {
+                                text: "热门岗位类型"
+                            },
+                            tooltip: {},
+                            legend: {
+                                data: ['热度']
+                            },
+                            xAxis: {
+                                data: target,
+                                "axisLabel": {
+                                    interval: 0
+                                }
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '热度',
+                                type: 'bar',
+                                label: {
+                                    normal: {
+                                        show: true,
+                                        position: 'top',
+                                        formatter: function (v) {
+                                            let val = v.data;
+                                            return val
+                                        },
+                                    }
+                                },
+                                data: sum
+                            }]
+                        };
+
+                        myChart.setOption(option,true);
+                    } else if (value == "热门城市") {
+                        for (let i = 0; i < data.length; i++) {
+                            sum.push(data[i]["sum"])
+                            target.push(data[i]["jarea"])
+                        }
+                        let myChart = echarts.init(document.getElementById('main'));
+                        // 指定图表的配置项和数据
+                        let option = {
+                            title: {
+                                text: "热门城市"
+                            },
+                            tooltip: {},
+                            legend: {
+                                data: ['热度']
+                            },
+                            xAxis: {
+                                data: target,
+                                "axisLabel": {
+                                    interval: 0
+                                }
+                            },
+                            yAxis: {},
+                            series: [{
+                                name: '热度',
+                                type: 'bar',
+                                label: {
+                                    normal: {
+                                        show: true,
+                                        position: 'top',
+                                        formatter: function (v) {
+                                            let val = v.data;
+                                            return val
+                                        },
+                                    }
+                                },
+                                data: sum
+                            }]
+                        };
+                        myChart.setOption(option,true);
+                    }
+                } else {
+                    alert("出现了一点意外")
+                }
+            }
+        });
+    }
+
+    // 基于准备好的dom，初始化echarts实例
+
+</script>
+</body>
+</html>

@@ -24,7 +24,11 @@ public class LogData {
     private int pid=0;
     private String queryKey=null;
     private int isSuccess=0;
-
+    public LogData(int pid,String actType,String jid){
+        this.uid=pid;
+        this.actType=actType;
+        this.jid=jid;
+    }
     public LogData(int uid, String uname, int age, int gender,
                    String expectedJob, String expectedArea, String education,
                    String hasExperience, String actType, String jid, String jname,
@@ -121,6 +125,16 @@ public class LogData {
         this.jcommpanyScale = jcommpanyScale;
         this.jarea = jarea;
         this.queryKey = queryKey;
+    }
+
+    public LogData(String education, Integer age) {
+        this.education=education;
+        this.age=age;
+    }
+
+    public LogData(int pid, String p_login) {
+        this.uid=pid;
+        this.actType=p_login;
     }
 
     public int getUid() {

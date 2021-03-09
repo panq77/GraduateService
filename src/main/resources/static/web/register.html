@@ -96,17 +96,12 @@
 					"dataType":"json",
 					"success":function(json){
 						if(json.code==20){
-                            if (identityVal=="求职"){
-								window.location.href ='updateInfo.html?uname='+innerText;
-							}else {
-								window.location.href ='pUpdateInfo.html';
-							}
-
+								window.location.href ='login.html';
 						}else{
 							alert(json.message);
 						}
 					}
-				})
+				});
 			})
 		</script>
 		

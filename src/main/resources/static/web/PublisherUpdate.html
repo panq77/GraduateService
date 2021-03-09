@@ -2,7 +2,7 @@
 	<head>
 		<title>表单页面</title>
 		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" href="../css/update.css" />
+		<link rel="stylesheet" type="text/css" href="../css/reg.css" />
 		<link rel="stylesheet" type="text/css" href="../css/index.css"/>
 
 		<script src="../bootstrap3/js/holder.js"></script>
@@ -21,31 +21,21 @@
 	</head>
 	<body style="background-image:url(../images/index/bg1.jpg); ">
 	<div class="container  text-left">
-	<div class="update" style="margin-top: 50px;margin-left: 200px">
+	<div class="regDiv" style="margin-top: 170px;margin-left: 200px">
 		<p>更新信息</p>
 	<form  id="form-update" class="form-horizontal" role="form">
 		<!--用户名-->
 		<div class="form-group">
-			<label  class="col-md-2 control-label">名字：</label>
+			<label  class="col-md-2 control-label">昵称：</label>
 			<div class="col-md-4">
-				<input id="uname"  name="uname" readonly  type="text" class="form-control"  >
+				<input id="nickName"  name="nickName"   type="text" class="form-control"  >
 			</div>
 			<label class="col-md-2 control-label">原密码:</label>
 			<div class="col-md-4">
-				<input  name="pwd" type="password" class="form-control" >
+				<input id="pwd"  name="pwd" type="password" class="form-control" >
 			</div>
 		</div>
-		<div class="form-group">
-			<label  class="col-md-2 control-label">年龄：</label>
-			<div class="col-md-4">
-				<input id="age" name="age"  type="text" class="form-control"  >
-			</div>
-			<label class="col-md-2 control-label"> 性别：</label>
-			<div class="col-md-4">
-				<input id="nan" class="radio-inline" type="radio" name="gender" value="0"/>男
-				<input id="nv" class="radio-inline"  type="radio" name="gender" value="1"/>女
-			</div>
-		</div>
+
 
 		<div class="form-group">
 			<label  class="col-md-2 control-label">电话：</label>
@@ -58,31 +48,17 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label  class="col-md-2 control-label" >职位：</label>
-			<div class="col-md-4">
-				<input id="expectedJob" name="expectedJob"  type="text" class="form-control"  >
+			<label  class="col-md-2 control-label">企业：</label>
+			<div class="col-md-4" >
+				<input id="commpany" name="commpany"  type="text" class="form-control"  >
 			</div>
-			<label class="col-md-2 control-label"> 地点：</label>
-			<div class="col-md-4">
-				<input id="expectedEara" name="expectedEara" type="text" class="form-control" >
-			</div>
+
 		</div>
-		<div class="form-group">
-			<label  class="col-md-2 control-label" >学历：</label>
-			<div class="col-md-4">
-				<input id="education" name="education"  type="text" class="form-control"  >
-			</div>
-			<label class="col-md-2 control-label"> 经验：</label>
-			<div class="col-md-4">
-				<input id="NoEx" class="radio-inline" type="radio" name="hasExperience" value="0"/>无
-				<input id="hasEx" class="radio-inline"  type="radio" name="hasExperience" value="1"/>有
-			</div>
-		</div>
+
 
 		<!--提交按钮-->
 
 		<div class="form-group">
-
 			<div class="col-md-4" style="float: right">
 				<input  class="btn btn-primary" type="reset" value="重置" />
 			</div>
@@ -99,35 +75,36 @@
 	</div>
 	<script type="text/javascript">
 		$(function () {
-			$.ajax({
-					"url":"/users/check_login",
+
+
+
+
+				$.ajax({
+					"url":"/publisher/check_login",
 					"type":"post",
 					"dataType":"json",
 					"success":function (json) {
 						if (json.code==20){
 							let data = json.data;
-							$("#uname").val(data.uname);
-							$("#age").val(data.age);
-							let genderId=json.data.gender==0?"nan":"nv"; // 0/1
-							$("#"+genderId).attr("checked","checked");
+							$("#nickName").val(data.nickName);
 							$("#phone").val(data.phone);
 							$("#email").val(data.email);
-							$("#expectedEara").val(data.expectedEara);
-							$("#expectedJob").val(data.expectedJob);
-							$("#education").val(data.education);
-							let exId=json.data.hasExperience==0?"noEx":"hasEx";
-							$("#"+exId).attr("checked","checked");
+							$("#commpany").val(data.commpany);
 						}else {
 							alert("请重新登录");
 							window.location.href='login.html';
 						}
 					}
 				});
+
+
+
+
 		});
 		$("#btn-update").click(function(){
 
 			$.ajax({
-				"url":"/users/update_user_info",
+				"url":"/publisher/update",
 				"data":$("#form-update").serialize(),
 				"type":"post",
 				"dataType":"json",

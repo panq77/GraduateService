@@ -9,19 +9,19 @@
     <script src="../bootstrap3/jquery-1.8.3.min.js"></script>
     <script src="../js/menu.js" type="text/javascript" charset="utf-8"></script>
     <script src="../js/jquery-getUrlParam.js" type="text/javascript"></script>
-    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/jobItem.css"/>
     <style>
         html {
             height: 100%
         }
         .head{
             height: 200px;
-            background: rgba(102, 79, 96, 0.75);
+            background: rgba(101, 78, 95, 0.75);
         }
         .main{
             margin-left: 40px;
             height: 100%;
-            background: rgba(194, 172, 6, 0.04);
+            background: rgba(93, 43, 111, 0.04);
         }
         body {
             margin: 0;
@@ -59,30 +59,41 @@
     <div style="display: inline ">
         <div style="margin-left: 50px">
 
-        <label id="jname" style="font-size:40px;margin-top: 20px">dadasdadada</label>
-        <label id="interviewer" style="font-size:25px;margin-top: 40px;margin-left: 40px">面试主管</label>
-       <label id="jcommpany_name" style="font-size:25px;margin-top: 40px;margin-left: 200px">江苏企业集团</label>
-            <label id="jcommpany_type" style="font-size:25px;margin-top: 40px;margin-left: 10px;">沐浴大树天气二点</label>
+        <label id="jname" style="font-size:40px;margin-top: 20px"></label>
+        <label id="interviewer" style="font-size:25px;margin-top: 40px;margin-left: 40px"></label>
+       <label id="jcommpany_name" style="font-size:25px;margin-top: 40px;margin-left: 200px"></label>
+            <label id="jcommpany_type" style="font-size:25px;margin-top: 40px;margin-left: 10px;"></label>
         </div>
         <div style="margin-left: 50px;font-size: 35px;">
-            <label id="jarea">上海</label>
-            <label id="salary" style="margin-left: 20px">2-10k</label>
-            <label id="type"  style="margin-left: 20px;font-size:25px">Java</label>
+            <label id="jarea"></label>
+            <label id="salary" style="margin-left: 20px"></label>
+            <label id="type"  style="margin-left: 20px;font-size:25px"></label>
         </div>
     </div>
 </div>
-<div class="main">
+
+<div  style="float: left;position: static;margin-left: 900px;background-color: #7f7b7b;height: 400px;width: 600px">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p class="panel-title"style="margin-left: 250px">为您推荐</p>
+        </div>
+        <div id="recommend" style="letter-spacing: 6px;width: 400px;position: relative; top: 20px;margin-left: 120px">
+
+        </div>
+
+    </div>
+</div>
+<div class="main" style="width: 800px;position: absolute">
     <label style="font-size: 30px">岗位职责</label>
-    <div><label id="job_duty">dsadad</label></div>
+    <div><label id="job_duty"></label></div>
     <label style="font-size: 30px">岗位需求</label>
-    <div><label id="job_request">dsadad</label></div>
+    <div><label id="job_request"></label></div>
     <label style="font-size: 30px">企业介绍</label>
-    <div><label id="jcommpany_intro">dsadad</label></div>
-    <div id="mailDiv" style="float: right;margin-right: 400px">
+    <div><label id="jcommpany_intro" style="width: 400px"></label></div>
+    <div id="mailDiv" style="float: right;">
 
+        <input id="back" class="btn btn-primary" type="button"  value="返回" />
 
-        <input type="file" id="file" name="file" onchange="fileUpload()" style="display:none">
-        <input id="mail" class="btn btn-primary" type="button" onclick="select_file()" value="投递简历" />
     </div>
 
 </div>
@@ -118,13 +129,13 @@
                       let jobdutySplit = jobDuty.split('；');
                       for (let i = 0; i < jobdutySplit.length; i++) {
 
-                          $("#job_duty").append( jobdutySplit[i]+"<br>");
+                          $("#job_duty").append(i+1+"、"+jobdutySplit[i]+"<br>");
                       }
 
                       let jobRequest = data.jobRequest;
                       let jobRequestSplit = jobRequest.split('；');
                       for (let i = 0; i < jobRequestSplit.length; i++) {
-                          $("#job_request").append( jobRequestSplit[i]+"<br>");
+                          $("#job_request").append( i+1+"、"+jobRequestSplit[i]+"<br>");
                       }
 
                       $("#jcommpany_intro").val(data.jcommpanyIntro);
@@ -141,7 +152,68 @@
             }
         });
         setUserInfo();
+        checkResume();
+        recommend();
     });
+    function recommend() {
+        $("#recommend").empty();
+        $.ajax({
+            "url": "/job/recommend",
+            "type": "post",
+            "data": null,
+            "dataType": "json",
+            "success": function (json) {
+                if (json.code == 20) {
+                    let data = json.data;
+                    for (let i = 0; i < data.length; i++) {
+                        let div = '<div class="col-md-12 jobItemDiv" style="margin-bottom: 20px">\n' +
+                            '                        <div >\n' +
+                            '                            <table id="#{jid}" class="col-md-12 text-row-6" onclick="searchJob(this.id);">\n' +
+                            '                                <tr >\n' +
+                            '                                    <td style="text-align: left;" >\n' +
+                            '                                    <a style="text-decoration: none;"href="javascript:void(0)">#{jobName}</a>\n' +
+                            '                                    </td>\n' +
+                            '                                    <td style="text-align: left;" >\n' +
+                            '                                    <a style="text-decoration: none;padding-left: 30px" href="javascript:void(0)">#{companyName}</a>\n' +
+                            '                                    </td >\n' +
+                            '                               </tr>\n' +
+                            '                            </table>\n' +
+                            '                        </div>\n' +
+                            '                    </div>';
+                        div = div.replace("#{jid}", data[i]["jid"]);
+                        div = div.replace("#{jobName}", data[i]["name"]);
+                        div = div.replace("#{companyName}", data[i]["jcommpanyName"])
+                        $("#recommend").append(div);
+                    }
+                } else {
+
+                }
+
+
+            }
+        });
+    };
+    function searchJob(jid) {
+        window.location.href = "jobDetail.html?jid=" + jid;
+    }
+    function checkResume() {
+         let jid = $.getUrlParam("jid");
+         $.ajax({
+             url:'/resume/checked',
+             data:'jid='+jid,
+             dataType:'json',
+             success:function (json) {
+                     if (json.code==20){
+                         let inputs='<input type="file" id="file" name="file" onchange="fileUpload()" style="display:none">\n' +
+                             '        <input id="mail" class="btn btn-primary" type="button" onclick="select_file()" value="投递简历" />';
+                         $("#mailDiv").append(inputs);
+                     }else {
+                         let iuput='<input style="background-color: #666666" id="mail" class="btn btn-primary" type="button" value="已投递" />';
+                         $("#mailDiv").append(iuput);
+                     }
+             }
+         });
+    }
     function setUserInfo() {
         $.ajax({
             "url": "/users/check_login",
@@ -175,7 +247,7 @@
         let jname = document.getElementById("jname").innerText.toString();
         let jid = $.getUrlParam("jid");
         let pid = localStorage.getItem("pid");
-        alert(pid);
+
        //  给formData对象添加<input>标签,注意与input标签的ID一致
         formData.append('file', $('#file')[0].files[0]);
         formData.append("jid",jid);
@@ -196,7 +268,9 @@
             }
         });
     }
-
+   $("#back").click(function () {
+           window.location.href="search.html";
+   });
 
 </script>
 

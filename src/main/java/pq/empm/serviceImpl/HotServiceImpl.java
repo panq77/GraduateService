@@ -20,16 +20,16 @@ public class HotServiceImpl implements HotService {
     public List<Map> query(String text) {
         List<Map> hots = new ArrayList<>();
         switch (text){
-            case "热门行业top" :
-                //hots=hotMapper.selectHotIndustry();
+            case "热门行业" :
+                hots=hotMapper.selectHotIndustry();
                 break;
-            case "热门岗位类型top":
+            case "热门岗位类型":
                 hots=hotMapper.selectHotJobType();
                 break;
-            case  "热门企业top"  :
+            case  "热门企业"  :
                 hots=hotMapper.selectHotCommpany();
                 break;
-            case  "热门地区"  :
+            case  "热门城市"  :
                 hots=hotMapper.selectHotArea();
                 break;
         }

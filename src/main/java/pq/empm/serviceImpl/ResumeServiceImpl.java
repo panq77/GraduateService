@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pq.empm.dao.ResumeMapper;
 import pq.empm.ex.FileSuffixNotMatch;
 import pq.empm.ex.ResumeHasDel;
+import pq.empm.ex.ResumeHasExist;
 import pq.empm.model.Resume;
 import pq.empm.service.ResumeService;
 import pq.empm.util.UploadUtil;
@@ -67,7 +68,7 @@ private ResumeMapper resumeMapper;
                 +path+newFileName;
         resume.setUrl(url);
         resume.setName(fileName);
-        resume.setStat("0");
+        resume.setStat("1");
         resume.setNewname(newFileName);
         resumeMapper.insert(resume);
         return;
@@ -86,21 +87,30 @@ private ResumeMapper resumeMapper;
         }else{
             throw new ResumeHasDel("已删除");
         }
-
     }
 
     @Override
     public void success(int rid) {
+        //stat改为2 是通过 1为等处理
         resumeMapper.updateStat(rid);
     }
 
     @Override
-    public List<ReceiveItem> getBox(Integer pid) {
-        List<Resume> resumes=resumeMapper.getListById(pid);
+    public List<ReceiveItem> getBox(String jid,Integer pid) {
+        List<Resume> resumes=resumeMapper.queryResumeByPidAndJid(pid,jid);
+
         List<ReceiveItem> box=new ArrayList<>();
         for (Resume resume: resumes){
             box.add(new ReceiveItem(resume.getRid(),resume.getJname(),resume.getName()));
         }
         return box;
+    }
+
+    @Override
+    public void checked(Integer uid, String jid) {
+        Resume resume=resumeMapper.checkedByJidAndUid(jid,uid);
+        if (resume!=null){
+            throw new ResumeHasExist("该岗位已投递");
+        }
     }
 }

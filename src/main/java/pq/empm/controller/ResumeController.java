@@ -11,6 +11,7 @@ import pq.empm.model.Resume;
 import pq.empm.model.User;
 import pq.empm.service.JobService;
 import pq.empm.service.ResumeService;
+import pq.empm.util.CheckNull;
 import pq.empm.util.MapperUtil;
 import pq.empm.vo.JsonResult;
 import pq.empm.vo.LogData;
@@ -42,9 +43,9 @@ public class ResumeController extends BaseController {
          * */
         String typeC=jobService.queryJobType(resume.getJid());
 
-        log.info(MapperUtil.MP.writeValueAsString(new LogData(  user.getUid(),user.getUname(),user.getAge(),
-                user.getGender(),user.getExpectedJob(),user.getExpectedEara(),
-                user.getEducation(),user.getHasExperience().toString(),"mailing_job", resume.getJid(),resume.getJname(),typeC,resume.getPid())));
+        log.info(MapperUtil.MP.writeValueAsString(new LogData(  user.getUid(),user.getUname(),(Integer) CheckNull.check(user.getAge()),
+                (Integer) CheckNull.check(user.getGender()),  CheckNull.check(user.getExpectedJob()).toString(),CheckNull.check(user.getExpectedEara()).toString(),
+                CheckNull.check(user.getEducation()).toString(),((Integer)CheckNull.check(user.getHasExperience())).toString(),"mailing_job", resume.getJid(),resume.getJname(),typeC,resume.getPid())));
 
         return new JsonResult<>();
     }
@@ -54,13 +55,10 @@ public class ResumeController extends BaseController {
         Resume resume = resumeService.download(rid);
         String downloadFilePath = resume.getUrl();//被下载的文件在服务器中的路径,
         String fileName = resume.getNewname();//被下载文件的名称
-
         File file = new File(downloadFilePath);
         if (file.exists()) {
-
-            response.setContentType("application/octet-stream");
-
             response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8"));
+            response.setContentType("application/octet-stream");
             byte[] buffer = new byte[1024];
             FileInputStream fis = null;
             BufferedInputStream bis = null;
@@ -73,6 +71,7 @@ public class ResumeController extends BaseController {
                     outputStream.write(buffer, 0, i);
                     i = bis.read(buffer);
                 }
+
                 return "下载成功";
             } catch (Exception e) {
                 e.printStackTrace();
@@ -106,10 +105,18 @@ public class ResumeController extends BaseController {
         resumeService.success(rid);
         return  new JsonResult<>();
     }
-    @RequestMapping("/receive")
-    public JsonResult<List<ReceiveItem>> getReceiveBox(HttpSession session){
-        Publisher publisher = (Publisher) session.getAttribute("p_username");
-        List<ReceiveItem> box = resumeService.getBox(publisher.getPid());
-        return  new JsonResult<>(box);
+
+    @RequestMapping("checked")
+     public JsonResult<Void> checkedMail(HttpSession session,String jid){
+        User u = (User) session.getAttribute("username");
+        resumeService.checked(u.getUid(),jid);
+        return new JsonResult<>();
+    }
+    @RequestMapping("resume_list")
+    public  JsonResult<List<ReceiveItem>> getResumeList(HttpSession session,String jid) throws JsonProcessingException {
+        Publisher p = (Publisher) session.getAttribute("p_username");
+        List<ReceiveItem> box = resumeService.getBox(jid, p.getPid());
+        log.info(MapperUtil.MP.writeValueAsString(new LogData(p.getPid(),"p_handle_resume",jid)));
+        return new JsonResult<>(box);
     }
 }

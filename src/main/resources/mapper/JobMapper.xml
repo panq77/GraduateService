@@ -1,89 +1,228 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="pq.empm.dao.JobMapper">
-  <resultMap id="BaseResultMap" type="pq.empm.model.Job">
-    <id column="jid" jdbcType="VARCHAR" property="jid" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="type_a" jdbcType="VARCHAR" property="typeA" />
-    <result column="type_b" jdbcType="VARCHAR" property="typeB" />
-    <result column="type_c" jdbcType="VARCHAR" property="typeC" />
-    <result column="salary" jdbcType="VARCHAR" property="salary" />
-    <result column="experience" jdbcType="VARCHAR" property="experience" />
-    <result column="education" jdbcType="VARCHAR" property="education" />
-    <result column="jcommpany_name" jdbcType="VARCHAR" property="jcommpanyName" />
-    <result column="jcommpany_type" jdbcType="VARCHAR" property="jcommpanyType" />
-    <result column="jcommpany_scale" jdbcType="VARCHAR" property="jcommpanyScale" />
-    <result column="jarea" jdbcType="VARCHAR" property="jarea" />
-    <result column="interviewer" jdbcType="VARCHAR" property="interviewer" />
-    <result column="job_duty" jdbcType="VARCHAR" property="jobDuty" />
-    <result column="job_request" jdbcType="VARCHAR" property="jobRequest" />
-    <result column="jcommpany_intro" jdbcType="VARCHAR" property="jcommpanyIntro" />
-    <result column="pid" jdbcType="INTEGER" property="pid" />
-  </resultMap>
-  <resultMap id="type" type="Map">
-    <result column="type_c" jdbcType="VARCHAR" property="typeC" />
-  </resultMap>
-  <resultMap id="CommpanyType" type="Map">
-    <result column="jcommpany_type" jdbcType="VARCHAR" property="jcommpanyType" />
-  </resultMap>
-  <select id="queryCommpanyType" resultMap="CommpanyType">
-    SELECT job.jcommpany_type from job
-    GROUP BY job.jcommpany_type
-  </select>
-  <select id="queryTypeCByTypeB" resultMap="type">
-    SELECT type_c from job
-    where type_b=#{typeB}
-    GROUP BY type_c
-  </select>
-  <select id="queryHotJob" parameterType="java.util.List" resultMap="BaseResultMap">
-    select jid,name,type_a,type_b,type_c,salary,experience,education,jcommpany_name,jcommpany_type,
-           jcommpany_scale,jarea,pid from job
-     where jid in
-     <foreach collection="list" item="jidList" open="(" close=")" separator=",">
-       #{jidList}
-     </foreach>
-  </select>
-  <select id="queryJobType" resultType="java.lang.String">
-    select type_c from job
-    where jid=#{jid}
-  </select>
-  <select id="queryAll" resultMap="BaseResultMap" >
-    select jid,name,type_a,type_b,type_c,salary,experience,education,jcommpany_name,jcommpany_type,
-           jcommpany_scale,jarea,interviewer,job_duty,job_request,jcommpany_intro,pid
-    from job
-  </select>
-  <select id="queryCount" resultType="Integer" >
-    select count(*)from job
-  </select>
-  <select id="queryDetailById" resultMap="BaseResultMap" >
-    select jid,name,type_c,salary,jcommpany_name,jcommpany_type,
-           jarea,interviewer,job_duty,job_request,jcommpany_intro,pid
-    from job where jid=#{jid}
-  </select>
-  <select id="queryById" resultMap="BaseResultMap" >
-    select jid,name,type_a,type_b,type_c,salary,experience,education,jcommpany_name,jcommpany_type,
-           jcommpany_scale,jarea,pid
-    from job where pid=#{pid}
-  </select>
-   <select id="queryAllById" resultMap="BaseResultMap" >
-     select jid,name,type_a,type_b,type_c,salary,experience,education,jcommpany_name,jcommpany_type,
-            jcommpany_scale,jarea,interviewer,job_duty,job_request,jcommpany_intro,pid
-            from job where jid=#{jid}
-   </select>
-  <insert id="insert" parameterType="pq.empm.model.Job">
-    insert into job (jid, name, type_a, 
-      type_b, type_c, salary, 
-      experience, education, jcommpany_name, 
-      jcommpany_type, jcommpany_scale, jarea, 
-      interviewer, job_duty, job_request, 
-      jcommpany_intro,pid)
-    values (#{jid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{typeA,jdbcType=VARCHAR}, 
-      #{typeB,jdbcType=VARCHAR}, #{typeC,jdbcType=VARCHAR}, #{salary,jdbcType=VARCHAR}, 
-      #{experience,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{jcommpanyName,jdbcType=VARCHAR}, 
-      #{jcommpanyType,jdbcType=VARCHAR}, #{jcommpanyScale,jdbcType=VARCHAR}, #{jarea,jdbcType=VARCHAR}, 
-      #{interviewer,jdbcType=VARCHAR}, #{jobDuty,jdbcType=VARCHAR}, #{jobRequest,jdbcType=VARCHAR}, 
-      #{jcommpanyIntro,jdbcType=VARCHAR},#{pid,jdbcType=INTEGER})
-  </insert>
+    <resultMap id="BaseResultMap" type="pq.empm.model.Job">
+        <id column="jid" jdbcType="VARCHAR" property="jid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="type_a" jdbcType="VARCHAR" property="typeA"/>
+        <result column="type_b" jdbcType="VARCHAR" property="typeB"/>
+        <result column="type_c" jdbcType="VARCHAR" property="typeC"/>
+        <result column="salary" jdbcType="VARCHAR" property="salary"/>
+        <result column="experience" jdbcType="VARCHAR" property="experience"/>
+        <result column="education" jdbcType="VARCHAR" property="education"/>
+        <result column="jcommpany_name" jdbcType="VARCHAR" property="jcommpanyName"/>
+        <result column="jcommpany_type" jdbcType="VARCHAR" property="jcommpanyType"/>
+        <result column="jcommpany_scale" jdbcType="VARCHAR" property="jcommpanyScale"/>
+        <result column="jarea" jdbcType="VARCHAR" property="jarea"/>
+        <result column="interviewer" jdbcType="VARCHAR" property="interviewer"/>
+        <result column="job_duty" jdbcType="VARCHAR" property="jobDuty"/>
+        <result column="job_request" jdbcType="VARCHAR" property="jobRequest"/>
+        <result column="jcommpany_intro" jdbcType="VARCHAR" property="jcommpanyIntro"/>
+        <result column="pid" jdbcType="INTEGER" property="pid"/>
+    </resultMap>
+    <resultMap id="type" type="Map">
+        <result column="type_c" jdbcType="VARCHAR" property="typeC"/>
+    </resultMap>
+    <resultMap id="CommpanyType" type="Map">
+        <result column="jcommpany_type" jdbcType="VARCHAR" property="jcommpanyType"/>
+    </resultMap>
+    <resultMap id="recommend" type="Map">
+        <result column="jid" jdbcType="VARCHAR" property="jid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="jcommpany_name" jdbcType="VARCHAR" property="jcommpanyName"/>
+    </resultMap>
+    <resultMap id="PublisherVO" type="pq.empm.vo.PublisherJob">
+        <result column="jid" jdbcType="VARCHAR" property="jid"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="experience" jdbcType="VARCHAR" property="experience"/>
+        <result column="education" jdbcType="VARCHAR" property="education"/>
+        <result column="jarea" jdbcType="VARCHAR" property="jarea"/>
+        <result column="stat" jdbcType="VARCHAR" property="stat"/>
+    </resultMap>
+    <resultMap id="getKeys" type="Map">
+        <result column="uid" jdbcType="INTEGER" property="uid"/>
+        <result column="key" jdbcType="VARCHAR" property="key"/>
+        <result column="click" jdbcType="VARCHAR" property="click"/>
+    </resultMap>
+    <select id="searchKey" resultMap="getKeys">
+        select uid, `key`, sum(click) as click
+        from u_key_search
+        where uid = #{uid}
+        group by uid, `key`
+        order by click
+        limit 0,3
+    </select>
 
+    <select id="recommendJob2Method" resultMap="recommend">
+        select jid, name, jcommpany_name
+        from job
+        where type_b = #{exJob}
+        limit 0,5
+    </select>
+    <select id="recommendJob" resultMap="recommend">
+        select jobs.jid, name, jcommpany_name, pubs.times
+        from (
+                 select j.name, j.jcommpany_name, j.jid, j.pid from job j where type_c = #{type}
+             ) jobs
+                 inner join (SELECT p.jid,
+                                    p.pid,
+                                    DATE_FORMAT(p.handle_time, '%Y-%m-%d') as that_day,
+                                    SUM(p.times)                           as times
+                             from p_handle p
+                             where DATE_FORMAT(p.handle_time, '%Y-%m-%d') > #{date}
+                             GROUP BY p.jid, p.pid
+        ) pubs on jobs.pid = pubs.pid
+        limit 0,10
+    </select>
+
+    <delete id="deleteByJid" parameterType="java.lang.String">
+        delete
+        from job
+        where jid = #{jid}
+    </delete>
+
+
+    <select id="queryPublisherJobsById" resultMap="PublisherVO">
+        select j.jid, j.name, j.experience, j.education, j.jarea, r.stat stat
+        from job j
+                 left join
+                 (select jid, stat from resume) r on j.jid = r.jid
+        where j.pid = #{pid}
+    </select>
+
+
+    <select id="queryCommpanyType" resultMap="CommpanyType">
+        SELECT job.jcommpany_type
+        from job
+        GROUP BY job.jcommpany_type
+    </select>
+
+
+    <select id="queryTypeCByTypeB" resultMap="type">
+        SELECT type_c
+        from job
+        where type_b = #{typeB}
+        GROUP BY type_c
+    </select>
+
+
+    <select id="queryHotJob" parameterType="java.util.List" resultMap="BaseResultMap">
+        select jid,name,type_a,type_b,type_c,salary,experience,education,jcommpany_name,jcommpany_type,
+        jcommpany_scale,jarea,pid from job
+        where jid in
+        <foreach collection="list" item="jidList" open="(" close=")" separator=",">
+            #{jidList}
+        </foreach>
+    </select>
+
+
+    <select id="queryJobType" resultType="java.lang.String">
+        select type_c
+        from job
+        where jid = #{jid}
+    </select>
+    <select id="queryAll" resultMap="BaseResultMap">
+        select jid,
+               name,
+               type_a,
+               type_b,
+               type_c,
+               salary,
+               experience,
+               education,
+               jcommpany_name,
+               jcommpany_type,
+               jcommpany_scale,
+               jarea,
+               interviewer,
+               job_duty,
+               job_request,
+               jcommpany_intro,
+               pid
+        from job
+    </select>
+    <select id="queryMax" resultType="Integer">
+        SELECT MAX(CAST(jid as SIGNED))
+        FROM job
+    </select>
+    <select id="queryCount" resultType="Integer">
+        select count(*)
+        from job
+    </select>
+    <select id="queryDetailById" resultMap="BaseResultMap">
+        select jid,
+               name,
+               type_c,
+               salary,
+               jcommpany_name,
+               jcommpany_type,
+               jarea,
+               interviewer,
+               job_duty,
+               job_request,
+               jcommpany_intro,
+               pid
+        from job
+        where jid = #{jid}
+    </select>
+    <select id="queryById" resultMap="BaseResultMap">
+        select jid,
+               name,
+               type_a,
+               type_b,
+               type_c,
+               salary,
+               experience,
+               education,
+               jcommpany_name,
+               jcommpany_type,
+               jcommpany_scale,
+               jarea,
+               pid
+        from job
+        where pid = #{pid}
+    </select>
+    <select id="queryAllById" resultMap="BaseResultMap">
+        select jid,
+               name,
+               type_a,
+               type_b,
+               type_c,
+               salary,
+               experience,
+               education,
+               jcommpany_name,
+               jcommpany_type,
+               jcommpany_scale,
+               jarea,
+               interviewer,
+               job_duty,
+               job_request,
+               jcommpany_intro,
+               pid
+        from job
+        where jid = #{jid}
+    </select>
+    <insert id="insert" parameterType="pq.empm.model.Job">
+        insert into job (jid, name, type_a,
+                         type_b, type_c, salary,
+                         experience, education, jcommpany_name,
+                         jcommpany_type, jcommpany_scale, jarea,
+                         interviewer, job_duty, job_request,
+                         jcommpany_intro, pid)
+        values (#{jid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{typeA,jdbcType=VARCHAR},
+                #{typeB,jdbcType=VARCHAR}, #{typeC,jdbcType=VARCHAR}, #{salary,jdbcType=VARCHAR},
+                #{experience,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{jcommpanyName,jdbcType=VARCHAR},
+                #{jcommpanyType,jdbcType=VARCHAR}, #{jcommpanyScale,jdbcType=VARCHAR}, #{jarea,jdbcType=VARCHAR},
+                #{interviewer,jdbcType=VARCHAR}, #{jobDuty,jdbcType=VARCHAR}, #{jobRequest,jdbcType=VARCHAR},
+                #{jcommpanyIntro,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER})
+    </insert>
+    <resultMap id="typeC" type="Map">
+        <result column="type_c" jdbcType="VARCHAR" property="typeC"/>
+    </resultMap>
+    <select id="queryAllTypeC" resultMap="typeC">
+        select type_c from job
+        group by type_c
+    </select>
 
 </mapper>

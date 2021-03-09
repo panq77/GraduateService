@@ -20,5 +20,5 @@ public interface HotMapper {
 
     int selectClickTimesByType(String text);
 
-    List<String> queryTop(@Param("start") int start,@Param("end") int end);
+    List<String> queryTop(@Param("start") Integer start,@Param("end") Integer end);
 }

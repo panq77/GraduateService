@@ -18,19 +18,8 @@ public class HotController {
     @Autowired
     private HotService hotService;
     @RequestMapping("/query_hot")
-    public JsonResult<List<String>> hotList(String text){
+    public JsonResult<List<Map>> hotList(String text){
         List<Map> hots=hotService.query(text);
-        List<String> lists=new ArrayList<>();
-        for (Map map:hots){
-            try {
-                String jsonMap = MapperUtil.MP.writeValueAsString(map);
-                lists.add(jsonMap);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-        return  new JsonResult<>(lists);
+        return  new JsonResult<>(hots);
     }
-
-
 }

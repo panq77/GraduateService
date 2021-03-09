@@ -50,31 +50,31 @@
         from hot
         ##where DATEDIFF(DATE_FORMAT(time, '%Y-%m-%d'), '2021-02-24') = 0
         group by jcommpany_type
-        order by sum
-        limit 1,5
+        order by sum desc
+        limit 0,5
     </select>
     <select id="selectHotJobType" resultMap="hot">
         select id, jid, type_c , sum(click_times) sum
         from hot
         ##where DATEDIFF(DATE_FORMAT(time, '%Y-%m-%d'), '2021-02-24') = 0
         group by type_c
-        order by sum
-        limit 1,5
+        order by sum desc
+        limit 0,5
     </select>
     <select id="selectHotCommpany" resultMap="hot" >
         select id,jid,jcommpany_name,sum(click_times) sum
                from hot
         ##where DATEDIFF(DATE_FORMAT(time, '%Y-%m-%d'), '2021-02-24') = 0
         group by jcommpany_name
-        order by sum
-        limit 1,5
+        order by sum desc
+        limit 0,5
     </select>
     <select id="selectHotArea" resultMap="hot" >
         select id,jid,jarea,sum(click_times) sum
         from hot
         ##where DATEDIFF(DATE_FORMAT(time, '%Y-%m-%d'), '2021-02-24') = 0
         group by jarea
-        order by sum
-        limit 1,5
+        order by sum desc
+        limit 0,3
     </select>
 </mapper>

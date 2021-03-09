@@ -48,7 +48,7 @@
             <ul class="nav nav-pills">
 
                 <li><a href="index.html">找工作</a></li>
-                <li><a href="charts.html">看形势</a></li>
+                <li><a href="echarts.html">看形势</a></li>
             </ul>
         </div>
         <br><br>
@@ -300,6 +300,8 @@
                     $("#logInfo").attr("style", "display : none;")
                     $("#username").text(json.data.uname);
 
+                }else {
+                    window.location.href="login.html";
                 }
             }
         });

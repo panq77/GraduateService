@@ -34,6 +34,15 @@ public abstract class BaseController {
         else if(e instanceof NoVisit){
             setError(jr,e);
         }
+        else if(e instanceof ResumeHasExist){
+            setError(jr,e);
+        }
+        else if(e instanceof ResumeNotHandle){
+            setError(jr,e);
+        }
+        else if(e instanceof NoMailForType){
+            setError(jr,e);
+        }
         return jr;
     }
     private void setError(JsonResult<Void> jr,Throwable e){

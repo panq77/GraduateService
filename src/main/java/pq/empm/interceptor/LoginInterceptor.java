@@ -11,14 +11,14 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session=request.getSession();
 
-	    if(session.getAttribute("username")==null&&session.getAttribute("p_username")==null) {
+	    if(session.getAttribute("username")!=null||session.getAttribute("p_username")!=null) {
 	        // 重定向到登录页面
-	        response.sendRedirect("http://localhost:8080/web/login.html");
-	        return false;
+            return true;
 	    }
-
+        response.sendRedirect("http://localhost:8080/web/login.html");
+        return false;
         // 放行
-        return true;
+
 
     }
 }

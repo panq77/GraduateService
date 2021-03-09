@@ -6,14 +6,14 @@
     <result column="type_c" jdbcType="VARCHAR" property="typeC" />
     <result column="education" jdbcType="VARCHAR" property="education" />
     <result column="mailing" jdbcType="INTEGER" property="mailing" />
-    <result column="click_times" jdbcType="INTEGER" property="clickTimes" />
+
   </resultMap>
 
   <insert id="insert" parameterType="pq.empm.model.JobTypeSituation">
     insert into job_type_situation (id, type_c, education, 
-      mailing, click_times)
+      mailing )
     values (#{id,jdbcType=BIGINT}, #{typeC,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, 
-      #{mailing,jdbcType=INTEGER}, #{clickTimes,jdbcType=INTEGER})
+      #{mailing,jdbcType=INTEGER})
   </insert>
   <resultMap id="situation" type="Map">
     <result column="type_c" jdbcType="VARCHAR" property="typeC" />

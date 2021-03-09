@@ -1,10 +1,12 @@
 package pq.empm.serviceImpl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
-import io.searchbox.core.Search;
+import io.searchbox.core.*;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,5 +87,45 @@ public class SearchServiceImpl implements SearchService {
             throw new JobNotExist("没有下一页了");
         }
         return  jobs;
+    }
+
+    @Override
+    public void addJob(Job job)  {
+
+
+        String jsonJob = null;
+        try {
+            jsonJob = MapperUtil.MP.writeValueAsString(job);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        EsJob esJob = new EsJob(job.getJid(), job.getName(), job.getTypeC(), job.getEducation(),
+                job.getJarea(), job.getSalary(), job.getJcommpanyType(), job.getJcommpanyScale(), jsonJob);
+
+        Bulk.Builder bulkbuilder = new Bulk.Builder().defaultIndex("job").defaultType("job");
+            Index index = new Index.Builder(esJob).build();
+            bulkbuilder.addAction(index);
+        try {
+            JestResult jestResult = jestClient.execute(bulkbuilder.build());
+            if (jestResult.isSucceeded()) {
+                System.out.println("插入成功");
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void removeJob(String jid) {
+        Delete delete = new Delete.Builder(jid).index(indexName).type(SearchServiceImpl.type).build();
+        try {
+           jestClient.execute(delete);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
