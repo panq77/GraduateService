@@ -12,6 +12,18 @@
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="stat" jdbcType="VARCHAR" property="stat" />
   </resultMap>
+  <resultMap id="notifyItem" type="pq.empm.vo.NotifyItem">
+    <id column="rid" jdbcType="INTEGER" property="rid" />
+    <result column="jid" jdbcType="VARCHAR" property="jid" />
+    <result column="jname" jdbcType="VARCHAR" property="jname" />
+    <result column="stat" jdbcType="VARCHAR" property="stat" />
+  </resultMap>
+  <select id="queryNotify" resultMap="notifyItem">
+    select rid,jid,jname,stat from resume where stat &lt;&gt; 1
+  </select>
+  <update id="updateStatByJid" >
+    update resume set stat=#{stat} where  jid=#{jid}
+  </update>
   <select id="queryResumeByPidAndJid" resultMap="BaseResultMap">
     select rid, newName, name,
            uid, pid, jid, jname,
@@ -27,7 +39,7 @@
     select rid,name,jname from resume where pid=#{pid}
   </select>
   <update id="updateStat" parameterType="pq.empm.model.Resume" >
-    update resume set stat=2 where rid=#{rid}
+    update resume set stat=#{stat} where rid=#{rid}
   </update>
   <delete id="deleteById" parameterType="pq.empm.model.Resume">
        delete from resume where rid=#{rid}

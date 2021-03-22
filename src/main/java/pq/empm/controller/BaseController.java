@@ -28,7 +28,7 @@ public abstract class BaseController {
         else if(e instanceof FileUploadError){
             setError(jr,e);
         }
-        else if(e instanceof ResumeHasDel){
+        else if(e instanceof NoNotify){
             setError(jr,e);
         }
         else if(e instanceof NoVisit){

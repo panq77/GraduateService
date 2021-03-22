@@ -145,7 +145,6 @@ public class JobController extends BaseController {
         }
         String visitListJsonDecode = URLDecoder.decode(visitListJson, "utf-8");
         LinkedList<VisitJob> visitList = MapperUtil.MP.readValue(visitListJsonDecode, LinkedList.class);
-
        return  new JsonResult<>(visitList);
     }
     @RequestMapping("publisher_job_list")

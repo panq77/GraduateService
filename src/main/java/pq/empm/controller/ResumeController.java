@@ -15,6 +15,7 @@ import pq.empm.util.CheckNull;
 import pq.empm.util.MapperUtil;
 import pq.empm.vo.JsonResult;
 import pq.empm.vo.LogData;
+import pq.empm.vo.NotifyItem;
 import pq.empm.vo.ReceiveItem;
 
 import javax.servlet.http.HttpServletResponse;
@@ -118,5 +119,20 @@ public class ResumeController extends BaseController {
         List<ReceiveItem> box = resumeService.getBox(jid, p.getPid());
         log.info(MapperUtil.MP.writeValueAsString(new LogData(p.getPid(),"p_handle_resume",jid)));
         return new JsonResult<>(box);
+    }
+    @RequestMapping("delResumeBox")
+    public JsonResult<Void> delResumeBox(String jid){
+        resumeService.delResumeBox(jid);
+        return  new JsonResult<>();
+    }
+    @RequestMapping("user_notify")
+    public JsonResult<List<NotifyItem>> notify(Integer uid){
+        List<NotifyItem> items= resumeService.queryResumeByUid(uid);
+        return  new JsonResult<>(items);
+    }
+    @RequestMapping("user_notify_del")
+    public JsonResult<Void> delResume(Integer rid){
+        resumeService.delResume(rid);
+        return  new JsonResult<>();
     }
 }

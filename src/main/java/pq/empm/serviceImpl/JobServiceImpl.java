@@ -115,22 +115,33 @@ public class JobServiceImpl implements JobService {
      */
     @Override
     public List<Map> recommendJob(User u) {
-
+        List<Map> typeC = jobMapper.queryAllTypeC();
         List<Map> maps = null;
         List<Map> keys = jobMapper.searchKey(u.getUid());
         System.out.println(keys);
         if (keys.size() != 0) {
             for (int i = 0; i < keys.size(); i++) {
                 String key = (String) keys.get(i).get("key");
-                maps = jobMapper.recommendJob(key, LocalDate.now().plusDays(-4).toString());
+
+                 a:for (int j = 0; j < typeC.size(); j++) {
+
+                    if (typeC.get(j).get("typeC").equals(key)){
+                        System.out.println(2222);
+                        maps = jobMapper.recommendJob(key, LocalDate.now().plusDays(-4).toString());
+                        break a;
+                    }
+                }
                 if (maps!=null){
                     break;
                 }
             }
         }
         if (maps==null){
-            if (u.getExpectedJob() != null) {
-                maps = jobMapper.recommendJob2Method(u.getExpectedJob());
+            if (u.getExpectedJob()!=null)
+            for (int i = 0; i < typeC.size(); i++) {
+                if (typeC.get(i).get("typeC").equals(u.getExpectedJob())){
+                    maps = jobMapper.recommendJob2Method(u.getExpectedJob());
+                }
             }
         }
         return maps;

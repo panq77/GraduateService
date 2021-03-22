@@ -88,6 +88,7 @@
 
 
                     </table>
+                    <div class="pull-right">  <input id="delAllResume" name="" type="button" onclick="delAllResume(this.name)" value="全部驳回" /></div>
                     <div class="pull-right">  <input type="button" onclick="closeResumeShow()" value="关闭" /></div>
 
 
@@ -147,6 +148,9 @@
 
 <script type="text/javascript">
     $(function () {
+       showPublisherJobs()
+    })
+    function showPublisherJobs() {
         $("#publish_jobs").empty();
         $.ajax({
             "url": "/job/publisher_job_list",
@@ -201,9 +205,10 @@
             }
 
         });
-    })
+    }
    function closeResumeShow() {
        document.getElementById('resume_list').style.display = 'none'
+       showPublisherJobs();
    }
     function showResumeInfo(jid) {
         document.getElementById('resume_list').style.display = 'block'
@@ -217,6 +222,9 @@
             "success":function (json) {
 
                if (json.code==20){
+                   let delAllResume = document.getElementById("delAllResume");
+                   delAllResume.name=jid;
+
                    let data = json.data;
                    for (let i = 0; i < data.length; i++) {
                        let div=' <div id="#{rid}" class="total-bar">\n' +
@@ -239,6 +247,23 @@
             }
         });
     }
+    function delAllResume(jid){
+        $.ajax({
+            url:'/resume/delResumeBox',
+            data:'jid='+jid,
+            type:'post',
+            dataType:'json',
+            "success":function (json) {
+                     if (json.code==20){
+                         alert("已删除");
+                     }else {
+                         alert(json.message);
+                     }
+
+            }
+        });
+    }
+
     $("#add_job").click(function () {
             window.location.href="addJob.html";
     });

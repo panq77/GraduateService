@@ -6,11 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pq.empm.dao.ResumeMapper;
 import pq.empm.ex.FileSuffixNotMatch;
+import pq.empm.ex.NoNotify;
 import pq.empm.ex.ResumeHasDel;
 import pq.empm.ex.ResumeHasExist;
 import pq.empm.model.Resume;
 import pq.empm.service.ResumeService;
 import pq.empm.util.UploadUtil;
+import pq.empm.vo.NotifyItem;
 import pq.empm.vo.ReceiveItem;
 
 import java.io.File;
@@ -81,18 +83,13 @@ private ResumeMapper resumeMapper;
 
     @Override
     public void backResume(int rid) {
-        Resume resume = resumeMapper.queryById(rid);
-        if(resume!=null){
-            resumeMapper.deleteById(rid);
-        }else{
-            throw new ResumeHasDel("已删除");
-        }
+            resumeMapper.updateStat(rid,"-1");
     }
 
     @Override
     public void success(int rid) {
         //stat改为2 是通过 1为等处理
-        resumeMapper.updateStat(rid);
+        resumeMapper.updateStat(rid,"2");
     }
 
     @Override
@@ -112,5 +109,24 @@ private ResumeMapper resumeMapper;
         if (resume!=null){
             throw new ResumeHasExist("该岗位已投递");
         }
+    }
+
+    @Override
+    public void delResumeBox(    String jid) {
+        resumeMapper.updateStatByJid(jid,"-1");
+    }
+
+    @Override
+    public List<NotifyItem> queryResumeByUid(Integer uid) {
+        List<NotifyItem>items = resumeMapper.queryNotify(uid);
+        if (items==null){
+            throw new NoNotify("没有通知");
+        }
+        return items;
+    }
+
+    @Override
+    public void delResume(Integer rid) {
+        resumeMapper.deleteById(rid);
     }
 }

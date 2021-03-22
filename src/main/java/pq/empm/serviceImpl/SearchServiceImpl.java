@@ -6,12 +6,12 @@ import io.searchbox.client.JestResult;
 import io.searchbox.core.*;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pq.empm.ex.JobNotExist;
 import pq.empm.model.Job;
+import pq.empm.service.JobService;
 import pq.empm.service.SearchService;
 import pq.empm.util.MapperUtil;
 import pq.empm.vo.SearchCondition;
@@ -20,6 +20,7 @@ import pq.empm.vo.EsJob;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -27,7 +28,8 @@ public class SearchServiceImpl implements SearchService {
     private static String type="job";
     @Autowired(required = false)
     private JestClient jestClient;
-
+    @Autowired
+    private JobService jobService;
     @Override
     public List<Job> search(SearchCondition searchCondition) {
         String jcommpanyType = searchCondition.getJcommpanyType();
@@ -37,6 +39,15 @@ public class SearchServiceImpl implements SearchService {
         String type = searchCondition.getType();
         String text = searchCondition.getText();
         String jcommpanyScale = searchCondition.getJcommpanyScale();
+        List<Map> typeC = jobService.queryTypeC();
+        if (type.equals("空")){
+            for (int i = 0; i < typeC.size(); i++) {
+                if (typeC.get(i).get("typeC").equals(text)){
+                    type=text;
+                    text="空";
+                }
+            }
+        }
         List<Job> jobs = new ArrayList<>();
         Integer page = searchCondition.getPage();
         Integer rows = searchCondition.getRows();
